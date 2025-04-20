@@ -79,7 +79,9 @@ const help: CommandFunction = (args): CommandOutput => {
 const ls: CommandFunction = (args): CommandOutput => {
     // args ignored for ls
     return [
-        'Available Pages:',
+        // Use the same structure as neofetch for the title
+        <div key="ls-pages-title"><span className="neofetch-label">Available Pages:</span></div>,
+        // Page names already use the correct class
         <span key="ls-home" className="page-name">  //Home</span>,
         <span key="ls-about" className="page-name">  //AboutMe</span>,
         <span key="ls-achieve" className="page-name">  //MyAchievements</span>,
