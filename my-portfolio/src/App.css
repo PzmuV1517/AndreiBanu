@@ -25,33 +25,30 @@ body {
   background-color: #000000; /* Updated background */
   color: #ffffff; /* Updated text color */
   padding: 10px;
-  height: 100%;
-  overflow-y: auto;
+  height: 100vh; /* Ensure terminal takes full viewport height */
+  overflow-y: auto; /* Allow scrolling for the entire terminal */
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
+  /* REMOVED flex properties */
 }
 
 .terminal-output {
-  flex-grow: 1;
+   /* This div now just holds the historical output blocks */
+   /* REMOVED flex-grow */
 }
 
-.terminal-output > div {
-  white-space: pre-wrap;
-  word-break: break-all;
+/* Styles for individual lines within output */
+.terminal-output > div,
+.terminal-output > span,
+.terminal-output > pre {
+    white-space: pre-wrap;
+    word-break: break-all;
 }
-
-.terminal-output > span {
-  display: block;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-
+/* Keep specific logo styling */
 .terminal-output pre.ascii-logo {
-  white-space: pre;
-  word-break: normal;
-  color: #00ff00; /* Green */
-  margin-bottom: 1em;
+    white-space: pre;
+    word-break: normal;
+    color: #00ff00; /* Green */
+    margin-bottom: 1em;
 }
 
 .terminal-input {
@@ -63,14 +60,17 @@ body {
   font-size: inherit;
   padding: 0;
   margin: 0;
-  flex-grow: 1;
+  flex-grow: 1; /* Allow input to fill remaining space on its line */
   caret-color: #ffffff; /* Updated caret color */
 }
 
 .terminal-input-line {
-  display: flex;
+  /* This is now just a regular block element after the output */
+  display: flex; /* Keep flex for aligning prompt and input */
   align-items: center;
   white-space: nowrap;
+  /* Add some margin if needed */
+  /* margin-top: 5px; */
 }
 
 .terminal-input-line span {
@@ -96,25 +96,17 @@ body {
 /* --- Prompt Colors --- */
 .prompt-user {
   color: #00ff00; /* Bright green */
-}
-
-.prompt-at {
-  color: #ffffff; /* Updated @ color */
-  margin: 0 1px;
+  /* REMOVED margin-right: 1px; */
 }
 
 .prompt-host {
   color: #00bfff; /* Deep sky blue */
-}
-
-.prompt-colon {
-  color: #ffffff; /* Updated colon color */
-  margin-right: 5px;
+   margin-right: 1px; /* Keep space between host and symbol */
 }
 
 .prompt-symbol {
-  color: #ffffff; /* Updated symbol color */
-  margin-right: 8px; /* Space before input */
+  color: #ffffff; /* White */
+  margin-right: 8px; /* Keep space before input */
 }
 /* --- End Prompt Colors --- */
 
@@ -139,6 +131,55 @@ body {
   color: #ff0000; /* Updated error message color */
 }
 /* --- End Command Output Colors --- */
+
+/* --- Boot Sequence Styles --- */
+.boot-sequence {
+  background-color: #000000;
+  color: #ffffff;
+  font-family: inherit;
+  padding: 10px;
+  height: 100vh;
+  overflow-y: auto;   /* ADDED - Enable vertical scrolling */
+  box-sizing: border-box;
+}
+
+/* Style for individual boot lines/elements */
+.boot-sequence > div,
+.boot-sequence > pre { /* Include pre for GRUB */
+    white-space: pre-wrap;
+    word-break: break-all;
+    min-height: 1em;
+}
+
+/* GRUB Menu Specific Styles */
+.grub-menu {
+    /* background-color: #0000aa; */ /* REMOVED blue background */
+    color: #ffffff; /* White text */
+    padding: 5px;
+    margin: 10px 0; /* Add some space around the menu */
+    border: 1px solid #888888; /* Changed border to grey for visibility on black */
+    white-space: pre; /* Strictly preserve whitespace */
+    font-weight: bold;
+}
+/* Optional: Highlight the first line */
+.grub-menu::first-line { /* Note: May not work perfectly with <pre> content */
+   /* background-color: #ffffff; */
+   /* color: #0000aa; */
+}
+
+.boot-ok { color: #00ff00; font-weight: bold; margin-right: 5px; }
+.boot-info { color: #00bfff; font-weight: bold; margin-right: 5px; }
+.boot-warn { color: #ffff00; font-weight: bold; margin-right: 5px; }
+.boot-fail { color: #ff0000; font-weight: bold; margin-right: 5px; }
+.boot-device { color: #ff7f50; }
+.boot-module { color: #ee82ee; }
+.boot-path { /* New class for file paths */
+    color: #9acd32; /* YellowGreen */
+}
+.boot-service { /* New class for service names */
+    color: #bdb76b; /* DarkKhaki */
+}
+/* --- End Boot Sequence Styles --- */
 
 /* Styles for BootSequence if needed */
 .boot-sequence {
