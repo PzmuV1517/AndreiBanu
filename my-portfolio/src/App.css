@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.terminal {
+  background-color: #000; /* Dark background */
+  color: #f0f0f0; /* Light text color */
+  font-family: 'Fira Code', monospace; /* Monospace font */
+  border: 1px solid #ccc; /* Add a border */
+  width: 100%;
+  min-height: 100vh; /* Ensure terminal takes full height */
+  display: flex;  
+  flex-direction: column; /* Keep content in a column */
+  margin: 0; 
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.terminal-output {
+  white-space: pre-wrap; /* Handle line breaks */
+  overflow-wrap: break-word;
+  flex-grow: 1;
+}
+
+.terminal-input {
+  display: flex; /* Make prompt and input stay on same line */
+  align-items: center;
+}
+
+.terminal-input input {
+  background: none; /* Remove background */
+  border: none; /* Remove border */
+  color: #f0f0f0; /* White text */
+  flex-grow: 1; /* Expand to fill available space */
+  font-family: 'Fira Code', monospace; /* Match terminal font */
+  font-size: 1em; /* Match terminal font size */
+  outline: none; /* Remove outline on focus */
+}
+
+.path {
+  color: #7fff00; /* Green text */
+}
+
+.commands {
+  display: flex;
+  margin-top: auto;
+}
+
+.prompt {
+  color: #7fff00;
+  margin-right: 10px;
+}
