@@ -8,43 +8,79 @@ html, body {
   overflow: hidden;
 }
 
+/* Apply base styles to the whole page */
+body {
+  background-color: #000000; /* Pure black background */
+  color: #ffffff; /* Bright white text */
+  margin: 0;
+  font-family: 'Fira Code', Consolas, 'Monaco', 'Courier New', Courier, monospace; /* Added Fira Code */
+}
+
+.App {
+  height: 100vh;
+}
+
 .terminal {
-  background-color: #000; /* Dark background */
-  color: #f0f0f0; /* Light text color */
-  font-family: 'Fira Code', monospace; /* Monospace font */
-  border: 1px solid #ccc; /* Add a border */
-  width: 100%;
-  min-height: 100vh; /* Ensure terminal takes full height */
-  display: flex;  
-  flex-direction: column; /* Keep content in a column */
-  margin: 0; 
-  padding: 20px;
+  font-family: inherit;
+  background-color: #000000; /* Updated background */
+  color: #ffffff; /* Updated text color */
+  padding: 10px;
+  height: 100%;
+  overflow-y: auto;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .terminal-output {
-  white-space: pre-wrap; /* Handle line breaks */
-  overflow-wrap: break-word;
   flex-grow: 1;
 }
 
-.terminal-input {
-  display: flex; /* Make prompt and input stay on same line */
-  align-items: center;
+.terminal-output > div {
+  white-space: pre-wrap;
+  word-break: break-all;
 }
 
-.terminal-input input {
-  background: none; /* Remove background */
-  border: none; /* Remove border */
-  color: #f0f0f0; /* White text */
-  flex-grow: 1; /* Expand to fill available space */
-  font-family: 'Fira Code', monospace; /* Match terminal font */
-  font-size: 1em; /* Match terminal font size */
-  outline: none; /* Remove outline on focus */
+.terminal-output > span {
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.terminal-output pre.ascii-logo {
+  white-space: pre;
+  word-break: normal;
+  color: #00ff00; /* Green */
+  margin-bottom: 1em;
+}
+
+.terminal-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: inherit; /* Inherits #ffffff from .terminal */
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+  caret-color: #ffffff; /* Updated caret color */
+}
+
+.terminal-input-line {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.terminal-input-line span {
+  margin-right: 8px; /* Adjusted spacing */
+  white-space: nowrap; /* Prevent prompt from wrapping */
+  /* color: #569cd6; */ /* Example: A subtle blue for the prompt if desired */
 }
 
 .path {
-  color: #7fff00; /* Green text */
+  color: #ffff00; /* Updated path color */
 }
 
 .commands {
@@ -55,4 +91,68 @@ html, body {
 .prompt {
   color: #7fff00;
   margin-right: 10px;
+}
+
+/* --- Prompt Colors --- */
+.prompt-user {
+  color: #00ff00; /* Bright green */
+}
+
+.prompt-at {
+  color: #ffffff; /* Updated @ color */
+  margin: 0 1px;
+}
+
+.prompt-host {
+  color: #00bfff; /* Deep sky blue */
+}
+
+.prompt-colon {
+  color: #ffffff; /* Updated colon color */
+  margin-right: 5px;
+}
+
+.prompt-symbol {
+  color: #ffffff; /* Updated symbol color */
+  margin-right: 8px; /* Space before input */
+}
+/* --- End Prompt Colors --- */
+
+/* --- Neofetch Label Color --- */
+.neofetch-label {
+  color: #00bfff; /* Use the same Deep sky blue as the host */
+  margin-right: 5px; /* Add some space after the label */
+}
+/* --- End Neofetch Label Color --- */
+
+/* --- Command Output Colors --- */
+.page-name {
+  color: #ffffff; /* Updated page name color */
+}
+
+.command-name {
+  color: #00ffff; /* Cyan */
+  font-weight: bold;
+}
+
+.error-message {
+  color: #ff0000; /* Updated error message color */
+}
+/* --- End Command Output Colors --- */
+
+/* Styles for BootSequence if needed */
+.boot-sequence {
+  background-color: #000000; /* Match terminal background */
+  color: #ffffff; /* Match terminal text color */
+  font-family: inherit;
+  padding: 10px;
+  height: 100vh;
+  overflow: hidden; /* Prevent scrollbars during boot */
+  box-sizing: border-box;
+}
+
+.boot-sequence pre {
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 0; /* Remove default pre margins */
 }
