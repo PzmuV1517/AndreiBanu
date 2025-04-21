@@ -197,3 +197,54 @@ body {
   word-break: break-all;
   margin: 0; /* Remove default pre margins */
 }
+
+/* --- Clickable Command/Link Styles --- */
+.clickable {
+    cursor: pointer;
+    /* Optional: Add a transition for smoother hover */
+    transition: color 0.2s ease;
+}
+
+.clickable:hover {
+     color: #00ffff; /* Keep Cyan on hover */
+}
+
+/* Ensure clickable spans behave correctly */
+.clickable.page-name,
+.clickable.command-name {
+    display: inline-block; /* Or block if they should take full width */
+}
+
+/* --- Page Content Styles --- */
+.page-content {
+  background-color: #000000; /* Black background */
+  color: #ffffff; /* White text */
+  font-family: 'Fira Code', Consolas, 'Monaco', 'Courier New', Courier, monospace;
+  padding: 20px;
+  height: 100vh;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.page-content h1 {
+  color: #00ff00; /* Green headings */
+  border-bottom: 1px solid #00ff00;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+
+.page-content p {
+  line-height: 1.6;
+}
+
+.page-link {
+    color: #00ffff; /* Cyan link */
+    text-decoration: none;
+    margin-top: 20px;
+    display: inline-block;
+}
+
+.page-link:hover {
+    text-decoration: underline;
+}
+/* --- End Page Content Styles --- */

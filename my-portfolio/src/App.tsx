@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import BootSequence from './BootSequence';
 import './App.css';
 import { commands, unknownCommand, CommandOutput } from './commands.tsx';
+
+// Key for sessionStorage
+const BOOT_COMPLETED_KEY = 'portfolioBootCompleted';
 
 // Helper function to create prompt JSX remains the same
 const renderPrompt = () => (
@@ -9,170 +13,162 @@ const renderPrompt = () => (
 );
 
 function App() {
-    const [bootCompleted, setBootCompleted] = useState(false);
+    // Initialize bootCompleted based on sessionStorage
+    const [bootCompleted, setBootCompleted] = useState<boolean>(() => {
+        return sessionStorage.getItem(BOOT_COMPLETED_KEY) === 'true';
+    });
     const [terminalOutput, setTerminalOutput] = useState<React.ReactNode[]>([]);
     const [currentInput, setCurrentInput] = useState('');
-    const [commandHistory, setCommandHistory] = useState<string[]>([]); // State for command history
-    const [historyIndex, setHistoryIndex] = useState<number>(-1); // -1 means current input, 0 is latest history item, etc.
-    const [isTyping, setIsTyping] = useState<boolean>(false); // State to track typing animation
+    const [commandHistory, setCommandHistory] = useState<string[]>([]);
+    const [historyIndex, setHistoryIndex] = useState<number>(-1);
+    const [isTyping, setIsTyping] = useState<boolean>(false);
     const endOfOutputRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const navigate = useNavigate();
+    // Ref to track if initial neofetch has run on direct load
+    const initialNeofetchRan = useRef<boolean>(false);
 
-    // --- MODIFIED: handleCommand now uses the imported commands object ---
-    const handleCommand = (fullCommand: string): CommandOutput => {
+    const handleCommand = (
+        fullCommand: string,
+        executeCommand: (cmd: string) => Promise<void>
+    ): CommandOutput => {
         const parts = fullCommand.trim().split(' ');
         const commandName = parts[0].toLowerCase();
-        const args = parts.slice(1); // Get arguments
+        const args = parts.slice(1);
 
         if (commandName in commands) {
-            // Execute the command function from the commands object
-            return commands[commandName](args);
-        } else if (commandName === '') { // Handle empty command explicitly if needed
-            return []; // Return empty array for no output
-        } else {
-            // Handle unknown command
+            return commands[commandName](args, executeCommand, navigate);
+        } else if (commandName === '') {
+             return [];
+        }
+        else {
             return unknownCommand(commandName);
         }
     };
 
-    // --- NEW: Helper function to type lines sequentially ---
     const typeLines = async (lines: React.ReactNode[], delay = 20): Promise<void> => {
         for (const line of lines) {
             setTerminalOutput(prev => [...prev, line]);
-            await new Promise(resolve => setTimeout(resolve, delay)); // Wait for the specified delay
+            await new Promise(resolve => setTimeout(resolve, delay));
         }
     };
 
-    // --- MODIFIED: handleBootComplete to use typeLines ---
-    const handleBootComplete = async () => { // Make async
-        setBootCompleted(true);
-        setIsTyping(true); // Start typing state
+    const processCommand = async (commandToProcess: string): Promise<void> => {
+        const command = commandToProcess.trim();
+        const commandToDisplay = commandToProcess;
 
-        const startupCommand = 'neofetch';
-        const commandLineNode = <div key="startup-prompt">{renderPrompt()} {startupCommand}</div>;
-        const commandOutput = handleCommand(startupCommand);
+        if (isTyping) return;
+        setIsTyping(true);
 
-        await typeLines([commandLineNode], 10); // Type command fast
-        await typeLines(commandOutput, 15); // Type output slightly slower
+        if (command.toLowerCase() === 'clear') {
+            setTerminalOutput([]);
+            setIsTyping(false);
+            setTimeout(() => inputRef.current?.focus(), 0);
+            return;
+        }
 
-        setIsTyping(false); // Finish typing state
-        setTimeout(() => inputRef.current?.focus(), 0); // Focus after typing
+        const commandLineNode = (command !== '' || commandToDisplay !== '')
+            ? <div key={`prompt-${Date.now()}`}>{renderPrompt()} {commandToDisplay}</div>
+            : null;
+
+        if (commandLineNode) {
+            await typeLines([commandLineNode], 10);
+        }
+
+        if (command !== '') {
+             setCommandHistory(prev => {
+                 if (prev[0] === command) return prev;
+                 return [command, ...prev];
+             });
+
+             const commandOutput = handleCommand(command, simulateCommandExecution);
+             await typeLines(commandOutput, 15);
+        }
+
+        setIsTyping(false);
+        setTimeout(() => inputRef.current?.focus(), 0);
     };
 
-    // --- useEffect for scrolling remains the same ---
+    const simulateCommandExecution = async (commandToRun: string): Promise<void> => {
+        if (isTyping) return;
+        setCurrentInput('');
+        setHistoryIndex(-1);
+        await processCommand(commandToRun);
+    };
+
+    const handleBootComplete = async () => {
+        sessionStorage.setItem(BOOT_COMPLETED_KEY, 'true');
+        setBootCompleted(true);
+        await processCommand('neofetch');
+    };
+
+    useEffect(() => {
+        // Check if boot is completed (likely from sessionStorage) AND
+        // if the initial neofetch for this mount hasn't run yet.
+        if (bootCompleted && !initialNeofetchRan.current) {
+            // Set the flag to true immediately to prevent re-running
+            initialNeofetchRan.current = true;
+            // Run neofetch because we skipped the boot sequence
+            processCommand('neofetch');
+        }
+        // This effect should run when bootCompleted state is initially set or changes.
+        // The ref prevents the command from running multiple times on subsequent re-renders.
+    }, [bootCompleted]);
+
     useEffect(() => {
         endOfOutputRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [terminalOutput, currentInput]);
 
-    // --- handleInputChange remains the same ---
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCurrentInput(event.target.value);
     };
 
-    // --- MODIFIED: handleInputSubmit to add to history and handle arrow keys ---
-    const handleKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => { // Make async
+    const handleKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
         const { key } = event;
-        let newHistoryIndex = historyIndex;
 
-        // Ignore input if already typing output
         if (isTyping && key !== 'Enter' && key !== 'ArrowUp' && key !== 'ArrowDown') {
-            event.preventDefault();
-            return;
+             event.preventDefault(); return;
         }
 
         if (key === 'Enter') {
-            // Prevent multiple rapid enters while typing
-            if (isTyping) {
-                event.preventDefault();
-                return;
-            }
-
-            const command = currentInput.trim();
-            const commandToDisplay = currentInput; // Keep original spacing
+            event.preventDefault();
+            const commandToRun = currentInput;
             setCurrentInput('');
             setHistoryIndex(-1);
-            setIsTyping(true); // Start typing
-
-            // Handle clear separately (no typing animation needed)
-            if (command.toLowerCase() === 'clear') {
-                setTerminalOutput([]);
-                // Optionally add 'clear' to history
-                // if (command !== '') setCommandHistory(prev => [command, ...prev]);
-                setIsTyping(false); // Reset typing state immediately for clear
-                setTimeout(() => inputRef.current?.focus(), 0);
-                return;
-            }
-
-            // Prepare the command line node
-            const commandLineNode = (command !== '' || commandToDisplay !== '')
-                ? <div key={`prompt-${Date.now()}`}>{renderPrompt()} {commandToDisplay}</div>
-                : null; // Don't display prompt line for empty input
-
-            // Type the command line itself (if it exists)
-            if (commandLineNode) {
-                await typeLines([commandLineNode], 10); // Type command fast
-            }
-
-            // Process the command and type its output
-            if (command !== '') {
-                // Add unique commands to history
-                setCommandHistory(prev => {
-                    if (prev[0] === command) return prev;
-                    return [command, ...prev];
-                });
-
-                const commandOutput = handleCommand(command);
-                await typeLines(commandOutput, 15); // Type output lines
-            }
-
-            setIsTyping(false); // Finish typing
-            // Refocus might not be needed if input never lost focus, but doesn't hurt
-            setTimeout(() => inputRef.current?.focus(), 0);
+            await processCommand(commandToRun);
 
         } else if (key === 'ArrowUp') {
-            if (isTyping) return; // Don't allow history navigation while typing
+            if (isTyping) return;
             event.preventDefault();
-            // ... (ArrowUp history logic remains the same) ...
             if (commandHistory.length > 0) {
-                newHistoryIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
+                const newHistoryIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
                 setHistoryIndex(newHistoryIndex);
                 setCurrentInput(commandHistory[newHistoryIndex]);
-                setTimeout(() => {
-                    if (inputRef.current) {
-                        inputRef.current.selectionStart = inputRef.current.selectionEnd = inputRef.current.value.length;
-                    }
-                }, 0);
+                setTimeout(() => { if (inputRef.current) { inputRef.current.selectionStart = inputRef.current.selectionEnd = inputRef.current.value.length; } }, 0);
             }
         } else if (key === 'ArrowDown') {
-            if (isTyping) return; // Don't allow history navigation while typing
+            if (isTyping) return;
             event.preventDefault();
-            // ... (ArrowDown history logic remains the same) ...
-            if (historyIndex >= 0) {
-                newHistoryIndex = Math.max(historyIndex - 1, -1);
+             if (historyIndex >= 0) {
+                const newHistoryIndex = Math.max(historyIndex - 1, -1);
                 setHistoryIndex(newHistoryIndex);
                 setCurrentInput(newHistoryIndex === -1 ? '' : commandHistory[newHistoryIndex]);
-                setTimeout(() => {
-                    if (inputRef.current) {
-                        inputRef.current.selectionStart = inputRef.current.selectionEnd = inputRef.current.value.length;
-                    }
-                }, 0);
+                 setTimeout(() => { if (inputRef.current) { inputRef.current.selectionStart = inputRef.current.selectionEnd = inputRef.current.value.length; } }, 0);
             }
         }
-        // Allow other keys if not typing
     };
 
-    // --- Render part remains the same ---
     return (
         <div className="App">
             {!bootCompleted ? (
                 <BootSequence onComplete={handleBootComplete} />
             ) : (
-                <div className="terminal" onClick={() => !isTyping && inputRef.current?.focus()}> {/* Prevent focus stealing while typing */}
+                <div className="terminal" onClick={() => !isTyping && inputRef.current?.focus()}>
                     <div className="terminal-output">
                         {terminalOutput.map((line, index) => (
-                            typeof line === 'string'
-                                ? <div key={`line-${index}`}>{line}</div>
-                                : React.cloneElement(line as React.ReactElement, { key: `line-${index}` })
+                            React.isValidElement(line)
+                                ? React.cloneElement(line, { key: `line-${index}-${line.key || index}` })
+                                : <div key={`line-${index}`}>{line}</div>
                         ))}
                     </div>
                     <div className="terminal-input-line">
@@ -183,10 +179,10 @@ function App() {
                             className="terminal-input"
                             value={currentInput}
                             onChange={handleInputChange}
-                            onKeyDown={handleKeyDown} // Use the modified async handler
+                            onKeyDown={handleKeyDown}
                             spellCheck="false"
                             autoFocus
-                            readOnly={isTyping} // Make input read-only while typing output
+                            readOnly={isTyping}
                         />
                     </div>
                     <div ref={endOfOutputRef} />
