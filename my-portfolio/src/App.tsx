@@ -4,7 +4,7 @@ import BootSequence from './BootSequence';
 import './App.css';
 import { commands, unknownCommand, CommandOutput } from './commands.tsx';
 
-// Key for sessionStorage
+// Keys for sessionStorage
 const BOOT_COMPLETED_KEY = 'portfolioBootCompleted';
 
 // Helper function to create prompt JSX remains the same
@@ -96,8 +96,12 @@ function App() {
         await processCommand(commandToRun);
     };
 
+    // --- MODIFIED: handleBootComplete dispatches event ---
     const handleBootComplete = async () => {
+        // Set boot completed flag *before* dispatching event
         sessionStorage.setItem(BOOT_COMPLETED_KEY, 'true');
+        // Dispatch custom event for Layout component
+        window.dispatchEvent(new Event('portfolioBootFinished'));
         setBootCompleted(true);
         await processCommand('neofetch');
     };
