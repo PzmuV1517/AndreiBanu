@@ -63,7 +63,7 @@ const neofetch: CommandFunction = (args, executeCommand, navigate): CommandOutpu
             </Clickable>
         )),
         '\u00A0',
-        "Type 'help' for a list of available commands.",
+        "Type 'help' for a list of available commands. Commands are also clickable in the terminal CLI.",
         '\u00A0',
         '\u00A0',
     ];
