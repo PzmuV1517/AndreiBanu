@@ -89,6 +89,8 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
     const [visibleLines, setVisibleLines] = useState<React.ReactNode[]>([]);
     const [lineIndex, setLineIndex] = useState(0);
     const endOfBootRef = useRef<HTMLDivElement>(null); // Ref for the bottom element
+    // Add a ref to track the container element
+    const terminalRef = useRef<HTMLDivElement>(null);
 
     // Effect to add lines and scroll
     useEffect(() => {
@@ -102,9 +104,9 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
             if (React.isValidElement(currentMessage) && currentMessage.key === 'grub') {
                 delay = 50;
             } else if (typeof currentMessage === 'string' && currentMessage.includes('Booting')) {
-                 delay = 500;
+                delay = 500;
             } else if (typeof currentMessage === 'string' && currentMessage.includes('login:')) {
-                 delay = 200;
+                delay = 200;
             }
 
 
@@ -133,8 +135,15 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
         // endOfBootRef.current?.scrollIntoView({ behavior: 'auto' });
     }, [visibleLines]); // Run this effect when visibleLines updates
 
+    // Add this useEffect to handle scrolling
+    useEffect(() => {
+      if (terminalRef.current) {
+        terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+      }
+    }, [visibleLines]); // Assumes visibleLines is your state variable holding the boot sequence text
+
     return (
-        <div className="boot-sequence">
+        <div className="boot-sequence" ref={terminalRef}>
             {visibleLines.map((line, index) => (
                 <div key={`boot-${index}`}>
                     {line}
