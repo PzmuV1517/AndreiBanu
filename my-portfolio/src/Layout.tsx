@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet, Link } from 'react-router-dom';
+// Import useLocation to detect the current page
+import { Outlet, Link, useLocation } from 'react-router-dom';
 import './App.css';
 
 // Session storage key
@@ -18,6 +19,10 @@ const Layout: React.FC = () => {
     const [isButtonVisible, setIsButtonVisible] = useState<boolean>(() => {
         return sessionStorage.getItem(BOOT_COMPLETED_KEY) === 'true';
     });
+
+    // Get location to apply CRT effect conditionally
+    const location = useLocation();
+    const isTerminalPage = location.pathname === '/';
 
     useEffect(() => {
         // Function to make the button visible
@@ -51,8 +56,14 @@ const Layout: React.FC = () => {
         isButtonVisible ? 'visible' : ''
     ].filter(Boolean).join(' ');
 
+    // Add 'crt' class if on the terminal page
+    const containerClasses = [
+        'site-container',
+        isTerminalPage ? 'crt' : ''
+    ].filter(Boolean).join(' ');
+
     return (
-        <div className="site-container">
+        <div className={containerClasses}>
             <button
                 className={buttonClasses}
                 onClick={toggleOverlay}

@@ -84,7 +84,7 @@ const bootMessages = [
     <span> </span>,
 ];
 
-// --- BootSequence Component (useEffect and render remain the same) ---
+// --- BootSequence Component ---
 const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
     const [visibleLines, setVisibleLines] = useState<React.ReactNode[]>([]);
     const [lineIndex, setLineIndex] = useState(0);
@@ -98,17 +98,20 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
         let completionTimeout: NodeJS.Timeout | null = null;
 
         if (lineIndex < bootMessages.length) {
-            // ... (delay calculation logic remains the same) ...
-            let delay = Math.random() * 30 + 10;
+            // Slower, more varied delay
+            let delay = Math.random() * 80 + 50;
             const currentMessage = bootMessages[lineIndex];
-            if (React.isValidElement(currentMessage) && currentMessage.key === 'grub') {
-                delay = 50;
-            } else if (typeof currentMessage === 'string' && currentMessage.includes('Booting')) {
-                delay = 500;
-            } else if (typeof currentMessage === 'string' && currentMessage.includes('login:')) {
-                delay = 200;
-            }
 
+            // Add a significant delay before the very first line appears
+            if (lineIndex === 0) {
+                delay = 1000; // 1 second delay before boot starts
+            } else if (React.isValidElement(currentMessage) && currentMessage.key === 'grub') {
+                delay = 200; // Slower GRUB menu appearance
+            } else if (typeof currentMessage === 'string' && currentMessage.includes('Booting')) {
+                delay = 1000; // Slower "Booting in..." message
+            } else if (typeof currentMessage === 'string' && currentMessage.includes('login:')) {
+                delay = 400; // Slower login prompt
+            }
 
             timeoutId = setTimeout(() => {
                 setVisibleLines(prev => [...prev, bootMessages[lineIndex]]);
@@ -117,7 +120,8 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
             }, delay);
 
         } else {
-            completionTimeout = setTimeout(onComplete, 150);
+            // Longer pause before handing over to the main app
+            completionTimeout = setTimeout(onComplete, 500);
         }
 
         // Cleanup function
@@ -137,9 +141,9 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
 
     // Add this useEffect to handle scrolling
     useEffect(() => {
-      if (terminalRef.current) {
-        terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
-      }
+        if (terminalRef.current) {
+            terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+        }
     }, [visibleLines]); // Assumes visibleLines is your state variable holding the boot sequence text
 
     return (
