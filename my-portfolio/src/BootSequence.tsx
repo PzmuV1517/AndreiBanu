@@ -108,8 +108,10 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
                 delay = 1000; // 1 second delay before boot starts
             } else if (React.isValidElement(currentMessage) && currentMessage.key === 'grub') {
                 delay = 200; // Slower GRUB menu appearance
+// @ts-ignore
             } else if (typeof currentMessage === 'string' && currentMessage.includes('Booting')) {
                 delay = 1000; // Slower "Booting in..." message
+// @ts-ignore
             } else if (typeof currentMessage === 'string' && currentMessage.includes('login:')) {
                 delay = 400; // Slower login prompt
             }
