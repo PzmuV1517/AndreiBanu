@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'; // Import useRef
-import './App.css'; // Ensure CSS is imported
+import React, { useState, useEffect, useRef } from 'react';
+import './App.css';
 
 interface BootSequenceProps {
     onComplete: () => void;
@@ -29,7 +29,7 @@ const grubMenu = `
  Booting \`PortfolioOS v1.0 (6.1.0-andrei-generic)\` in 1...
 `;
 
-// --- Even more enhanced boot messages ---
+// --- Your existing boot messages ---
 const bootMessages = [
     <span>Initializing BIOS... <span className="boot-ok">[ OK ]</span></span>,
     <span><span className="boot-info">[INFO]</span> CPU: Intel(R) Xeon(R) CPU E5-2690 v4 @ 2.60GHz stepping 01</span>,
@@ -88,9 +88,10 @@ const bootMessages = [
 const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
     const [visibleLines, setVisibleLines] = useState<React.ReactNode[]>([]);
     const [lineIndex, setLineIndex] = useState(0);
-    const endOfBootRef = useRef<HTMLDivElement>(null); // Ref for the bottom element
-    // Add a ref to track the container element
     const terminalRef = useRef<HTMLDivElement>(null);
+    // REMOVED: audioRef
+
+    // REMOVED: Effect for Audio Playback and Control
 
     // Effect to add lines and scroll
     useEffect(() => {
@@ -116,7 +117,6 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
             timeoutId = setTimeout(() => {
                 setVisibleLines(prev => [...prev, bootMessages[lineIndex]]);
                 setLineIndex(prev => prev + 1);
-                // Scroll after state update (in the next render cycle)
             }, delay);
 
         } else {
@@ -129,32 +129,24 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
             if (timeoutId) clearTimeout(timeoutId);
             if (completionTimeout) clearTimeout(completionTimeout);
         };
-    }, [lineIndex, onComplete]); // Dependency array remains the same
+    }, [lineIndex, onComplete]);
 
     // Effect specifically for scrolling
-    useEffect(() => {
-        // Scroll to the bottom whenever visibleLines changes
-        endOfBootRef.current?.scrollIntoView({ behavior: 'smooth' });
-        // Alternatively, use 'auto' for instant scroll:
-        // endOfBootRef.current?.scrollIntoView({ behavior: 'auto' });
-    }, [visibleLines]); // Run this effect when visibleLines updates
-
-    // Add this useEffect to handle scrolling
     useEffect(() => {
         if (terminalRef.current) {
             terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
         }
-    }, [visibleLines]); // Assumes visibleLines is your state variable holding the boot sequence text
+    }, [visibleLines]);
 
     return (
-        <div className="boot-sequence" ref={terminalRef}>
+        // Added 'booting' class to hide scrollbar
+        <div className="terminal booting" ref={terminalRef}>
             {visibleLines.map((line, index) => (
                 <div key={`boot-${index}`}>
                     {line}
                 </div>
             ))}
-            {/* Add an empty div at the end with the ref */}
-            <div ref={endOfBootRef} />
+            <div />
         </div>
     );
 };

@@ -4,19 +4,20 @@ import BootSequence from './BootSequence';
 import './App.css';
 import { commands, unknownCommand, CommandOutput } from './commands.tsx';
 
-// Keys for sessionStorage
+// Key for sessionStorage
 const BOOT_COMPLETED_KEY = 'portfolioBootCompleted';
 
-// Helper function to create prompt JSX remains the same
 const renderPrompt = () => (
     <><span className="prompt-user">guest</span><span className="prompt-host">@PortfolioOS</span><span className="prompt-symbol">:~$</span></>
 );
 
 function App() {
-    // Initialize bootCompleted based on sessionStorage
     const [bootCompleted, setBootCompleted] = useState<boolean>(() => {
         return sessionStorage.getItem(BOOT_COMPLETED_KEY) === 'true';
     });
+    // New state to track if the user has clicked the initial button
+    const [hasInitiatedBoot, setHasInitiatedBoot] = useState<boolean>(false);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
     const [terminalOutput, setTerminalOutput] = useState<React.ReactNode[]>([]);
     const [currentInput, setCurrentInput] = useState('');
     const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -25,8 +26,35 @@ function App() {
     const endOfOutputRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
-    // Ref to track if initial neofetch has run on direct load
     const initialNeofetchRan = useRef<boolean>(false);
+
+    // Function to start audio and visual boot sequence
+    const handleBootInitiation = () => {
+        if (hasInitiatedBoot) return; // Prevent multiple clicks
+
+        // --- Start Audio ---
+        const audio = new Audio('/startup.mp3');
+        audioRef.current = audio;
+        audio.volume = 1.0;
+
+        const handleTimeUpdate = () => {
+            if (audio.currentTime > 4) {
+                const fadeDuration = audio.duration - 4;
+                if (fadeDuration > 0) {
+                    const progress = (audio.currentTime - 4) / fadeDuration;
+                    const newVolume = Math.max(0.05, 1.0 - (0.95 * progress));
+                    audio.volume = newVolume;
+                }
+            }
+        };
+        audio.addEventListener('timeupdate', handleTimeUpdate);
+        audio.play(); // This will work because it's triggered by a user click
+
+        // --- Start Visuals ---
+        setHasInitiatedBoot(true);
+        // --- Signal that boot has started ---
+        window.dispatchEvent(new Event('bootInitiated'));
+    };
 
     const handleCommand = (
         fullCommand: string,
@@ -96,27 +124,19 @@ function App() {
         await processCommand(commandToRun);
     };
 
-    // --- MODIFIED: handleBootComplete dispatches event ---
-    const handleBootComplete = async () => {
-        // Set boot completed flag *before* dispatching event
+    const handleBootComplete = () => {
         sessionStorage.setItem(BOOT_COMPLETED_KEY, 'true');
-        // Dispatch custom event for Layout component
         window.dispatchEvent(new Event('portfolioBootFinished'));
         setBootCompleted(true);
-        await processCommand('neofetch');
     };
 
     useEffect(() => {
-        // Check if boot is completed (likely from sessionStorage) AND
-        // if the initial neofetch for this mount hasn't run yet.
         if (bootCompleted && !initialNeofetchRan.current) {
-            // Set the flag to true immediately to prevent re-running
             initialNeofetchRan.current = true;
-            // Run neofetch because we skipped the boot sequence
-            processCommand('neofetch');
+            setTimeout(() => {
+                processCommand('neofetch');
+            }, 100);
         }
-        // This effect should run when bootCompleted state is initially set or changes.
-        // The ref prevents the command from running multiple times on subsequent re-renders.
     }, [bootCompleted]);
 
     useEffect(() => {
@@ -164,9 +184,7 @@ function App() {
 
     return (
         <div className="App">
-            {!bootCompleted ? (
-                <BootSequence onComplete={handleBootComplete} />
-            ) : (
+            {bootCompleted ? (
                 <div className="terminal" onClick={() => !isTyping && inputRef.current?.focus()}>
                     <div className="terminal-output">
                         {terminalOutput.map((line, index) => (
@@ -191,6 +209,14 @@ function App() {
                     </div>
                     <div ref={endOfOutputRef} />
                 </div>
+            ) : !hasInitiatedBoot ? (
+                <div className="boot-container">
+                    <button className="boot-button" onClick={handleBootInitiation}>
+                        Boot-up
+                    </button>
+                </div>
+            ) : (
+                <BootSequence onComplete={handleBootComplete} />
             )}
         </div>
     );
