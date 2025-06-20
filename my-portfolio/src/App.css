@@ -41,11 +41,6 @@ body {
     display: none;
 }
 
-.terminal-output {
-   /* This div now just holds the historical output blocks */
-   /* REMOVED flex-grow */
-}
-
 /* Styles for individual lines within output */
 .terminal-output > div,
 .terminal-output > span,
@@ -170,11 +165,6 @@ body {
     border: 1px solid #888888; /* Changed border to grey for visibility on black */
     white-space: pre; /* Strictly preserve whitespace */
     font-weight: bold;
-}
-/* Optional: Highlight the first line */
-.grub-menu::first-line { /* Note: May not work perfectly with <pre> content */
-   /* background-color: #ffffff; */
-   /* color: #0000aa; */
 }
 
 .boot-ok { color: #00ff00; font-weight: bold; margin-right: 5px; }
@@ -322,12 +312,6 @@ body {
 /* Icon styling */
 .easy-mode-button svg {
     flex-shrink: 0;
-}
-
-/* Hover state - Apply only when visible */
-.easy-mode-button.visible:hover {
-  /* Revert to the default shadow to remove the glow effect on hover */
-  
 }
 
 /* --- Overlay Styles Remain the Same --- */

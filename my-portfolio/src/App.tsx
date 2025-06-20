@@ -18,7 +18,6 @@ function App() {
     });
     const [hasInitiatedBoot, setHasInitiatedBoot] = useState<boolean>(false);
     const audioRef = useRef<HTMLAudioElement | null>(null);
-    const [init, setInit] = useState(false);
     const [terminalOutput, setTerminalOutput] = useState<React.ReactNode[]>([]);
     const [currentInput, setCurrentInput] = useState('');
     const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -204,10 +203,6 @@ function App() {
                  setTimeout(() => { if (inputRef.current) { inputRef.current.selectionStart = inputRef.current.selectionEnd = inputRef.current.value.length; } }, 0);
             }
         }
-    };
-
-    const particleOptions: any = {
-        // ... particle options ...
     };
 
     return (
