@@ -410,6 +410,55 @@ body {
 
 /* --- End Easy Mode Styles --- */
 
+/* --- Overlay Hint Box Styles --- */
+.hint-box-overlay {
+  position: fixed;
+  top: 80px; /* Increased from 20px to lower the box */
+  right: 16px;
+  width: 250px; /* Set a fixed width */
+  z-index: 1000; /* Ensure it's above the terminal but below the menu */
+  border: 1px solid #00ffff; /* Cyan to match the menu */
+  background-color: rgba(26, 26, 26, 0.9); /* Semi-transparent background */
+  backdrop-filter: blur(3px);
+  color: #00ffff;
+  padding: 15px;
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+  transition: box-shadow 0.5s ease-in-out;
+}
+
+.hint-box-overlay .hint-box-title {
+  font-weight: bold;
+  color: #ffffff; /* White title to stand out */
+  display: block;
+  margin-bottom: 8px;
+}
+
+.hint-box-overlay p {
+  margin: 0;
+  padding: 0;
+  font-size: 0.9em;
+  color: #cccccc; /* Lighter grey for the text */
+}
+
+/* Pulsing animation for the first visit */
+.hint-box-overlay.pulse {
+  animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+  }
+}
+/* --- End Overlay Hint Box Styles --- */
+
 /* --- Boot-up Button Styles --- */
 .boot-container {
   position: relative; /* Set as the positioning context */

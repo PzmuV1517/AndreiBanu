@@ -67,7 +67,8 @@ const Layout: React.FC = () => {
     ].filter(Boolean).join(' ');
 
     return (
-        <div className={containerClasses}>
+        <>
+            {/* The button is now outside the site-container, so it won't get the CRT effect */}
             <button
                 className={buttonClasses}
                 onClick={toggleOverlay}
@@ -89,6 +90,7 @@ const Layout: React.FC = () => {
                 <span className="button-text">Menu</span>
             </button>
 
+            {/* The overlay is also outside the site-container */}
             {isOverlayOpen && (
                 <div className="overlay" onClick={closeOverlay}>
                     <div className="overlay-content" onClick={(e) => e.stopPropagation()}>
@@ -111,8 +113,12 @@ const Layout: React.FC = () => {
                     </div>
                 </div>
             )}
-            <Outlet />
-        </div>
+
+            {/* This container now only wraps the page content */}
+            <div className={containerClasses}>
+                <Outlet />
+            </div>
+        </>
     );
 };
 

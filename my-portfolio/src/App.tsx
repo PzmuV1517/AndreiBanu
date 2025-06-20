@@ -6,6 +6,7 @@ import { commands, unknownCommand, CommandOutput } from './commands.tsx';
 
 // Key for sessionStorage
 const BOOT_COMPLETED_KEY = 'portfolioBootCompleted';
+const HINT_BOX_SHOWN_KEY = 'portfolioHintBoxShown'; // Key for the new hint box
 
 const renderPrompt = () => (
     <><span className="prompt-user">guest</span><span className="prompt-host">@PortfolioOS</span><span className="prompt-symbol">:~$</span></>
@@ -15,14 +16,17 @@ function App() {
     const [bootCompleted, setBootCompleted] = useState<boolean>(() => {
         return sessionStorage.getItem(BOOT_COMPLETED_KEY) === 'true';
     });
-    // New state to track if the user has clicked the initial button
     const [hasInitiatedBoot, setHasInitiatedBoot] = useState<boolean>(false);
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    const [init, setInit] = useState(false);
     const [terminalOutput, setTerminalOutput] = useState<React.ReactNode[]>([]);
     const [currentInput, setCurrentInput] = useState('');
     const [commandHistory, setCommandHistory] = useState<string[]>([]);
     const [historyIndex, setHistoryIndex] = useState<number>(-1);
     const [isTyping, setIsTyping] = useState<boolean>(false);
+    // --- New states for the hint box ---
+    const [isHintVisible, setIsHintVisible] = useState<boolean>(false);
+    const [isHintPulsing, setIsHintPulsing] = useState<boolean>(false);
     const endOfOutputRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
@@ -104,6 +108,12 @@ function App() {
         }
 
         if (command !== '') {
+             const commandName = command.split(' ')[0].toLowerCase();
+             // If a valid command is run, just hide the hint box if it's visible.
+             if (commandName in commands && isHintVisible) {
+                 setIsHintVisible(false);
+             }
+
              setCommandHistory(prev => {
                  if (prev[0] === command) return prev;
                  return [command, ...prev];
@@ -133,8 +143,22 @@ function App() {
     useEffect(() => {
         if (bootCompleted && !initialNeofetchRan.current) {
             initialNeofetchRan.current = true;
-            setTimeout(() => {
-                processCommand('neofetch');
+            // A small delay to let the terminal appear before running the command
+            setTimeout(async () => {
+                await processCommand('neofetch');
+
+                // --- New, simplified hint logic ---
+                // Only show the hint if it has never been shown before in this session.
+                if (sessionStorage.getItem(HINT_BOX_SHOWN_KEY) === null) {
+                    setIsHintVisible(true);
+                    setIsHintPulsing(true);
+                    sessionStorage.setItem(HINT_BOX_SHOWN_KEY, 'true');
+
+                    // Stop the pulsing after 4 seconds, but leave the box visible.
+                    setTimeout(() => {
+                        setIsHintPulsing(false);
+                    }, 4000);
+                }
             }, 100);
         }
     }, [bootCompleted]);
@@ -182,33 +206,46 @@ function App() {
         }
     };
 
+    const particleOptions: any = {
+        // ... particle options ...
+    };
+
     return (
         <div className="App">
             {bootCompleted ? (
-                <div className="terminal" onClick={() => !isTyping && inputRef.current?.focus()}>
-                    <div className="terminal-output">
-                        {terminalOutput.map((line, index) => (
-                            React.isValidElement(line)
-                                ? React.cloneElement(line, { key: `line-${index}-${line.key || index}` })
-                                : <div key={`line-${index}`}>{line}</div>
-                        ))}
+                <>
+                    {/* --- Render Hint Box as an Overlay --- */}
+                    {isHintVisible && (
+                        <div className={`hint-box-overlay ${isHintPulsing ? 'pulse' : ''}`}>
+                            <span className="hint-box-title">[ HINT ]</span>
+                            <p>Use the 'Menu' button in the top right for easy navigation, or continue using the command shell.</p>
+                        </div>
+                    )}
+                    <div className="terminal" onClick={() => !isTyping && inputRef.current?.focus()}>
+                        <div className="terminal-output">
+                            {terminalOutput.map((line, index) => (
+                                React.isValidElement(line)
+                                    ? React.cloneElement(line, { key: `line-${index}-${line.key || index}` })
+                                    : <div key={`line-${index}`}>{line}</div>
+                            ))}
+                        </div>
+                        <div className="terminal-input-line">
+                            {renderPrompt()}
+                            <input
+                                ref={inputRef}
+                                type="text"
+                                className="terminal-input"
+                                value={currentInput}
+                                onChange={handleInputChange}
+                                onKeyDown={handleKeyDown}
+                                spellCheck="false"
+                                autoFocus
+                                readOnly={isTyping}
+                            />
+                        </div>
+                        <div ref={endOfOutputRef} />
                     </div>
-                    <div className="terminal-input-line">
-                        {renderPrompt()}
-                        <input
-                            ref={inputRef}
-                            type="text"
-                            className="terminal-input"
-                            value={currentInput}
-                            onChange={handleInputChange}
-                            onKeyDown={handleKeyDown}
-                            spellCheck="false"
-                            autoFocus
-                            readOnly={isTyping}
-                        />
-                    </div>
-                    <div ref={endOfOutputRef} />
-                </div>
+                </>
             ) : !hasInitiatedBoot ? (
                 <div className="boot-container">
                     <button className="boot-button" onClick={handleBootInitiation}>
