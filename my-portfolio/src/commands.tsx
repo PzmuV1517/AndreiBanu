@@ -22,7 +22,7 @@ const Clickable: React.FC<{ onClick: () => void; children: React.ReactNode; clas
 
 // --- Individual Command Implementations ---
 
-const neofetch: CommandFunction = (args, executeCommand, navigate): CommandOutput => {
+const neofetch: CommandFunction = (_args, _executeCommand, navigate): CommandOutput => {
     const pages = [
         // Removed //Home
         { name: '//AboutMe', key: 'nf-about', path: '/about-me' },
@@ -69,7 +69,7 @@ const neofetch: CommandFunction = (args, executeCommand, navigate): CommandOutpu
     ];
 };
 
-const help: CommandFunction = (args, executeCommand, navigate): CommandOutput => {
+const help: CommandFunction = (_args, executeCommand, _navigate): CommandOutput => {
     const commandDetails = [
         { cmd: 'help', desc: 'Show this help message', action: () => executeCommand('help') },
         { cmd: 'clear', desc: 'Clear the terminal screen', action: () => executeCommand('clear') },
@@ -103,7 +103,7 @@ const help: CommandFunction = (args, executeCommand, navigate): CommandOutput =>
     return output;
 };
 
-const ls: CommandFunction = (args, executeCommand, navigate): CommandOutput => {
+const ls: CommandFunction = (_args, _executeCommand, navigate): CommandOutput => {
     const pages = [
         // Removed //Home
         { name: '//AboutMe', key: 'ls-about', path: '/about-me' },
@@ -132,7 +132,7 @@ const pagePaths: Record<string, string> = {
     '//contact': '/contact',
 };
 
-const goto: CommandFunction = (args, executeCommand, navigate): CommandOutput => {
+const goto: CommandFunction = (args, _executeCommand, navigate): CommandOutput => {
     if (args.length === 1 && args[0].startsWith('//')) {
         const requestedPage = args[0].toLowerCase();
         const pageName = args[0]; // Keep original casing for output
