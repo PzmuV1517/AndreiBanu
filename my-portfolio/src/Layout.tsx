@@ -9,7 +9,8 @@ const navPages = [
     { name: 'Terminal', path: '/' },
     { name: 'About Me', path: '/about-me' },
     { name: 'My Achievements', path: '/my-achievements' },
-    { name: 'My Projects', path: '/my-projects' }, // Add this line
+    { name: 'My Projects', path: '/my-projects' },
+    { name: 'My Skills', path: '/my-skills' }, // Add this line
     { name: 'Contact', path: '/contact' },
 ];
 

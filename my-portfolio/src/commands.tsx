@@ -27,7 +27,8 @@ const neofetch: CommandFunction = (_args, _executeCommand, navigate): CommandOut
         // Removed //Home
         { name: '//AboutMe', key: 'nf-about', path: '/about-me' },
         { name: '//MyAchievements', key: 'nf-achieve', path: '/my-achievements' },
-        { name: '//MyProjects', key: 'nf-projects', path: '/my-projects' }, // Add this line
+        { name: '//MyProjects', key: 'nf-projects', path: '/my-projects' },
+        { name: '//MySkills', key: 'nf-skills', path: '/my-skills' }, // Add this line
         { name: '//Contact', key: 'nf-contact', path: '/contact' },
     ];
     return [
@@ -74,7 +75,7 @@ const help: CommandFunction = (_args, executeCommand, _navigate): CommandOutput 
     const commandDetails = [
         { cmd: 'help', desc: 'Show this help message', action: () => executeCommand('help') },
         { cmd: 'clear', desc: 'Clear the terminal screen', action: () => executeCommand('clear') },
-        { cmd: 'ls', desc: 'List available pages (AboutMe, MyAchievements, MyProjects, Contact)', action: () => executeCommand('ls') }, // Updated description
+        { cmd: 'ls', desc: 'List available pages (AboutMe, MyAchievements, MyProjects, MySkills, Contact)', action: () => executeCommand('ls') }, // Updated description
         { cmd: 'goto [page]', desc: 'Navigate to a page (e.g., goto //AboutMe)', clickable: false }, // Mark goto as not directly clickable
         { cmd: 'neofetch', desc: 'Display system information', action: () => executeCommand('neofetch') },
     ];
@@ -109,7 +110,8 @@ const ls: CommandFunction = (_args, _executeCommand, navigate): CommandOutput =>
         // Removed //Home
         { name: '//AboutMe', key: 'ls-about', path: '/about-me' },
         { name: '//MyAchievements', key: 'ls-achieve', path: '/my-achievements' },
-        { name: '//MyProjects', key: 'ls-projects', path: '/my-projects' }, // Add this line
+        { name: '//MyProjects', key: 'ls-projects', path: '/my-projects' },
+        { name: '//MySkills', key: 'ls-skills', path: '/my-skills' }, // Add this line
         { name: '//Contact', key: 'ls-contact', path: '/contact' },
     ];
     return [
@@ -131,7 +133,8 @@ const ls: CommandFunction = (_args, _executeCommand, navigate): CommandOutput =>
 const pagePaths: Record<string, string> = {
     '//aboutme': '/about-me',
     '//myachievements': '/my-achievements',
-    '//myprojects': '/my-projects', // Add this line
+    '//myprojects': '/my-projects',
+    '//myskills': '/my-skills', // Add this line
     '//contact': '/contact',
 };
 

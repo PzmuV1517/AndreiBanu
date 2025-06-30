@@ -6,7 +6,8 @@ import Layout from './Layout.tsx'; // Import the new Layout component
 import App from './App.tsx'; // Terminal App
 import AboutMe from './AboutMe.tsx';
 import MyAchievements from './MyAchievements.tsx';
-import MyProjects from './MyProjects.tsx'; // Add this import
+import MyProjects from './MyProjects.tsx';
+import MySkills from './MySkills.tsx'; // Add this import
 import Contact from './Contact.tsx';
 
 import './index.css';
@@ -20,7 +21,8 @@ const router = createBrowserRouter([
 			{ index: true, element: <App /> },
 			{ path: 'about-me', element: <AboutMe /> },
 			{ path: 'my-achievements', element: <MyAchievements /> },
-			{ path: 'my-projects', element: <MyProjects /> }, // Add this route
+			{ path: 'my-projects', element: <MyProjects /> },
+			{ path: 'my-skills', element: <MySkills /> }, // Add this route
 			{ path: 'contact', element: <Contact /> },
 			// Add more routes here as needed
 		],

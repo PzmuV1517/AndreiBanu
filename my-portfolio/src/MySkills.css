@@ -1,0 +1,269 @@
+/* MySkills.css - Retro styled skills page */
+
+.skills-container {
+  width: 100vw; /* Full viewport width */
+  height: 100vh; /* Full viewport height */
+  min-height: 100vh; /* Ensure minimum height is full viewport */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-y: auto; /* Enable vertical scrolling */
+  background-color: #121212;
+  color: #f5f5f5;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content horizontally */
+  justify-content: flex-start; /* Align content to top */
+  padding: 4rem 2rem 2rem 2rem; /* Top: 4rem, Right: 2rem, Bottom: 2rem, Left: 2rem */
+  margin: 0; /* Remove margin */
+  box-sizing: border-box; /* Include padding in element's total width and height */
+  position: relative; /* Ensure proper positioning */
+}
+
+/* Back to Terminal Button */
+.back-to-terminal-btn {
+  position: fixed;
+  top: 1rem;
+  left: 2rem;
+  background-color: #1a1a1a;
+  color: #5beeff;
+  border: 1px solid rgba(91, 238, 255, 0.3);
+  border-radius: 4px;
+  padding: 0.5rem 1rem 0.5rem 2rem; /* Top: 0.5rem, Right: 1rem, Bottom: 0.5rem, Left: 2rem */
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 0.9rem;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.back-to-terminal-btn:hover {
+  background-color: #5beeff;
+  color: #1a1a1a;
+  border-color: #5beeff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(91, 238, 255, 0.3);
+}
+
+.skills-content {
+  width: 100%; /* Full width to stretch completely */
+  max-width: 100%; /* Ensure content doesn't exceed container width */
+  margin: 0; /* Remove auto margins */
+  border: 1px solid rgba(114, 114, 114, 0.4);
+  border-radius: 6px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  background-color: #1a1a1a; /* Dark but visible background */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Ensure content doesn't spill outside border */
+  flex: 1; /* Allow content to grow and fill available space */
+  box-sizing: border-box; /* Include border in width calculation */
+}
+
+.skills-body {
+  padding: 2rem;
+  overflow-y: auto; /* Allow scrolling within the content area */
+}
+
+/* Rest of the existing styles */
+.retro-terminal-header {
+  display: flex;
+  align-items: center;
+  background-color: #333;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  padding: 0.5rem 1rem;
+  width: 100%; /* Ensure header spans full width */
+  flex-shrink: 0; /* Prevent header from shrinking */
+  min-height: 2.5rem; /* Ensure minimum height for visibility */
+}
+
+.header-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.header-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.header-button:nth-child(1) {
+  background-color: #ff5f56;
+}
+
+.header-button:nth-child(2) {
+  background-color: #ffbd2e;
+}
+
+.header-button:nth-child(3) {
+  background-color: #27c93f;
+}
+
+.terminal-title {
+  margin-left: auto;
+  margin-right: 25px;
+  font-size: 0.85rem;
+  color: #aaa;
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: visible; /* Ensure text is always visible */
+  text-overflow: clip; /* Prevent ellipsis */
+}
+
+.skills-title {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  color: #5beeff;
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.typewriter-container {
+  display: flex;
+  align-items: center;
+}
+
+.typewriter-text {
+  color: #5beeff;
+  font-weight: bold;
+}
+
+.cursor {
+  display: inline-block;
+  width: 10px;
+  height: 1em;
+  background-color: #5beeff;
+  margin-left: 2px;
+  visibility: visible;
+}
+
+.cursor.blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.skills-description {
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.skills-description p {
+  margin-bottom: 1.2rem;
+}
+
+.section-title {
+  color: #5beeff;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(91, 238, 255, 0.3);
+  padding-bottom: 0.5rem;
+}
+
+.highlight {
+  color: #5beeff;
+  font-weight: 500;
+}
+
+.code {
+  background-color: rgba(114, 114, 114, 0.2);
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+}
+
+em {
+  color: #ffd700;
+  font-style: normal;
+}
+
+.skills-list {
+  list-style-type: none;
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.skills-list li {
+  margin-bottom: 0.8rem;
+  position: relative;
+}
+
+.skills-list li::before {
+  content: '>';
+  position: absolute;
+  left: -1.2rem;
+  color: #5beeff;
+}
+
+.closing {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(114, 114, 114, 0.3);
+}
+
+.nav-links {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.terminal-link {
+  color: #5beeff;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.9rem;
+  transition: color 0.2s, transform 0.2s;
+}
+
+.terminal-link:hover {
+  color: #fff;
+  transform: translateX(-3px);
+}
+
+.terminal-link::before {
+  content: '';
+  margin-right: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .skills-container {
+    padding: 2rem 1rem 1rem 1rem; /* Top: 2rem, Right: 1rem, Bottom: 1rem, Left: 1rem on mobile */
+  }
+  
+  .skills-content {
+    width: 100%; /* Full width on mobile */
+    margin: 0;
+  }
+  
+  .skills-body {
+    padding: 1.5rem;
+  }
+  
+  .skills-title {
+    font-size: 1.8rem;
+  }
+  
+  .section-title {
+    font-size: 1.2rem;
+  }
+  
+  .skills-list {
+    padding-left: 1.2rem;
+  }
+  
+  .skills-list li::before {
+    left: -1rem;
+  }
+}
