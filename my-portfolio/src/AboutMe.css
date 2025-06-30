@@ -19,6 +19,35 @@
   position: relative; /* Ensure proper positioning */
 }
 
+/* Back to Terminal Button */
+.back-to-terminal-btn {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  background-color: #1a1a1a;
+  color: #5beeff;
+  border: 1px solid rgba(91, 238, 255, 0.3);
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 0.9rem;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.back-to-terminal-btn:hover {
+  background-color: #5beeff;
+  color: #1a1a1a;
+  border-color: #5beeff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(91, 238, 255, 0.3);
+}
+
 .about-me-content {
   width: 100%; /* Full width to stretch completely */
   margin: 0; /* Remove auto margins */

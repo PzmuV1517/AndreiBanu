@@ -41,6 +41,10 @@ const MyProjects: React.FC = () => {
 
   return (
     <div className="projects-container">
+      <Link to="/" className="back-to-terminal-btn">
+        ← Terminal
+      </Link>
+      
       <div className="projects-content">
         <div className="retro-terminal-header">
           <div className="header-buttons">

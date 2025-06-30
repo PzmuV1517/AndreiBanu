@@ -25,6 +25,10 @@ const MyAchievements: React.FC = () => {
 
   return (
     <div className="achievements-container">
+      <Link to="/" className="back-to-terminal-btn">
+        ← Terminal
+      </Link>
+      
       <div className="achievements-content">
         <div className="retro-terminal-header">
           <div className="header-buttons">
