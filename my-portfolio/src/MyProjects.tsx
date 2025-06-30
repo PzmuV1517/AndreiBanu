@@ -141,8 +141,8 @@ const MyProjects: React.FC = () => {
           </div>
 
           <div className="nav-links">
-            <Link to="/about-me" className="terminal-link">
-              ← Back to About Me
+            <Link to="/" className="terminal-link">
+              ← Back to Terminal
             </Link>
           </div>
         </div>
