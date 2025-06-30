@@ -4,42 +4,50 @@ import { BootSequence } from './components';
 import './styles/App.css';
 import { commands, unknownCommand, CommandOutput } from './utils/commands';
 
-// Key for sessionStorage
+// Session storage keys for persistence across browser sessions
 const BOOT_COMPLETED_KEY = 'portfolioBootCompleted';
-const HINT_BOX_SHOWN_KEY = 'portfolioHintBoxShown'; // Key for the new hint box
+const HINT_BOX_SHOWN_KEY = 'portfolioHintBoxShown';
 
+// Terminal prompt component
 const renderPrompt = () => (
     <><span className="prompt-user">guest</span><span className="prompt-host">@PortfolioOS</span><span className="prompt-symbol">:~$</span></>
 );
 
 function App() {
+    // Boot sequence state - persisted to skip on refresh
     const [bootCompleted, setBootCompleted] = useState<boolean>(() => {
         return sessionStorage.getItem(BOOT_COMPLETED_KEY) === 'true';
     });
     const [hasInitiatedBoot, setHasInitiatedBoot] = useState<boolean>(false);
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    
+    // Terminal state management
     const [terminalOutput, setTerminalOutput] = useState<React.ReactNode[]>([]);
     const [currentInput, setCurrentInput] = useState('');
     const [commandHistory, setCommandHistory] = useState<string[]>([]);
     const [historyIndex, setHistoryIndex] = useState<number>(-1);
     const [isTyping, setIsTyping] = useState<boolean>(false);
-    // --- New states for the hint box ---
+    
+    // Hint box state for user guidance
     const [isHintVisible, setIsHintVisible] = useState<boolean>(false);
     const [isHintPulsing, setIsHintPulsing] = useState<boolean>(false);
+    
+    // Refs for DOM manipulation
     const endOfOutputRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
     const initialNeofetchRan = useRef<boolean>(false);
 
-    // Function to start audio and visual boot sequence
+    // Handles the boot sequence initiation with audio and visual effects
     const handleBootInitiation = () => {
-        if (hasInitiatedBoot) return; // Prevent multiple clicks
+        if (hasInitiatedBoot) return;
 
-        // --- Start Audio ---
+        // Setup startup audio with fade effect
         const audio = new Audio('/startup.mp3');
         audioRef.current = audio;
         audio.volume = 1.0;
 
+        // Fade out audio after 4 seconds
         const handleTimeUpdate = () => {
             if (audio.currentTime > 4) {
                 const fadeDuration = audio.duration - 4;
@@ -51,14 +59,14 @@ function App() {
             }
         };
         audio.addEventListener('timeupdate', handleTimeUpdate);
-        audio.play(); // This will work because it's triggered by a user click
+        audio.play();
 
-        // --- Start Visuals ---
         setHasInitiatedBoot(true);
-        // --- Signal that boot has started ---
+        // Notify BootSequence component to start
         window.dispatchEvent(new Event('bootInitiated'));
     };
 
+    // Processes terminal commands and returns appropriate output
     const handleCommand = (
         fullCommand: string,
         executeCommand: (cmd: string) => Promise<void>
@@ -91,6 +99,7 @@ function App() {
         if (isTyping) return;
         setIsTyping(true);
 
+        // Handle clear command immediately without processing
         if (command.toLowerCase() === 'clear') {
             setTerminalOutput([]);
             setIsTyping(false);
@@ -98,6 +107,7 @@ function App() {
             return;
         }
 
+        // Display the command that was entered
         const commandLineNode = (command !== '' || commandToDisplay !== '')
             ? <div key={`prompt-${Date.now()}`}>{renderPrompt()} {commandToDisplay}</div>
             : null;
@@ -108,7 +118,7 @@ function App() {
 
         if (command !== '') {
              const commandName = command.split(' ')[0].toLowerCase();
-             // If a valid command is run, just hide the hint box if it's visible.
+             // Hide hint box when user successfully runs a command
              if (commandName in commands && isHintVisible) {
                  setIsHintVisible(false);
              }
@@ -133,27 +143,26 @@ function App() {
         await processCommand(commandToRun);
     };
 
+    // Handles boot sequence completion
     const handleBootComplete = () => {
         sessionStorage.setItem(BOOT_COMPLETED_KEY, 'true');
         window.dispatchEvent(new Event('portfolioBootFinished'));
         setBootCompleted(true);
     };
 
+    // Auto-run neofetch after boot completion and show help hint
     useEffect(() => {
         if (bootCompleted && !initialNeofetchRan.current) {
             initialNeofetchRan.current = true;
-            // A small delay to let the terminal appear before running the command
             setTimeout(async () => {
                 await processCommand('neofetch');
 
-                // --- New, simplified hint logic ---
-                // Only show the hint if it has never been shown before in this session.
+                // Show hint box for first-time users
                 if (sessionStorage.getItem(HINT_BOX_SHOWN_KEY) === null) {
                     setIsHintVisible(true);
                     setIsHintPulsing(true);
                     sessionStorage.setItem(HINT_BOX_SHOWN_KEY, 'true');
 
-                    // Stop the pulsing after 4 seconds, but leave the box visible.
                     setTimeout(() => {
                         setIsHintPulsing(false);
                     }, 4000);

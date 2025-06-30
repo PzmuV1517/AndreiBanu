@@ -1,23 +1,21 @@
-// filepath: /home/ubuntu/AndreiBanu/my-portfolio/src/AboutMe.tsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './AboutMe.css';
 
 const AboutMe: React.FC = () => {
+  // State for typewriter effect
   const [displayedText, setDisplayedText] = useState('');
   const [showCursor, setShowCursor] = useState(true);
   const fullText = '> Andrei Banu_';
   const typingSpeed = 120; // milliseconds per character
 
-  // On component mount
+  // Setup page styling and cleanup on component mount/unmount
   useEffect(() => {
-    // Force the page to be visible
     document.body.style.backgroundColor = '#121212';
     document.body.style.margin = '0';
     document.body.style.padding = '0';
     document.body.style.overflow = 'auto';
 
-    // Cleanup function to restore original styles
     return () => {
       document.body.style.backgroundColor = '';
       document.body.style.margin = '';
@@ -26,7 +24,7 @@ const AboutMe: React.FC = () => {
     };
   }, []);
 
-  // Typewriter effect
+  // Typewriter effect for the header text
   useEffect(() => {
     if (displayedText.length < fullText.length) {
       const timeout = setTimeout(() => {
@@ -34,7 +32,7 @@ const AboutMe: React.FC = () => {
       }, typingSpeed);
       return () => clearTimeout(timeout);
     } else {
-      // Start cursor blinking
+      // Start cursor blinking animation once typing is complete
       const cursorInterval = setInterval(() => {
         setShowCursor(prev => !prev);
       }, 500);

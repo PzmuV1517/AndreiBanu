@@ -2,27 +2,26 @@ import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { Layout, AboutMe, MyAchievements, MyProjects, MySkills, Contact } from './components'; // Import components
-import App from './App.tsx'; // Terminal App
+import { Layout, AboutMe, MyAchievements, MyProjects, MySkills, Contact } from './components';
+import App from './App.tsx';
 
 import './styles/index.css';
 import './styles/App.css';
 
+// Router configuration with nested routes under Layout
 const router = createBrowserRouter([
 	{
 		path: '/',
 		element: <Layout />,
 		children: [
-			{ index: true, element: <App /> },
+			{ index: true, element: <App /> }, // Terminal interface
 			{ path: 'about-me', element: <AboutMe /> },
 			{ path: 'my-achievements', element: <MyAchievements /> },
 			{ path: 'my-projects', element: <MyProjects /> },
-			{ path: 'my-skills', element: <MySkills /> }, // Add this route
+			{ path: 'my-skills', element: <MySkills /> },
 			{ path: 'contact', element: <Contact /> },
-			// Add more routes here as needed
 		],
 	},
-	// You could have routes outside the Layout here if needed
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

@@ -1,4 +1,3 @@
-// filepath: /home/ubuntu/AndreiBanu/my-portfolio/src/MyAchievements.tsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './MyAchievements.css';

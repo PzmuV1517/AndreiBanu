@@ -1,34 +1,30 @@
 import React from 'react';
 import logoAscii from './logoAscii';
-// Import useNavigate hook
 import { useNavigate } from 'react-router-dom';
 
-// Define the structure for command output
+// Type definitions for terminal command system
 export type CommandOutput = React.ReactNode[];
 
-// Update CommandFunction type to accept navigate and executeCommand
 type CommandFunction = (
     args: string[],
     executeCommand: (cmd: string) => Promise<void>,
-    navigate: ReturnType<typeof useNavigate> // Add navigate param
+    navigate: ReturnType<typeof useNavigate>
 ) => CommandOutput;
 
-// --- Helper component for clickable spans ---
+// Reusable clickable component for interactive terminal elements
 const Clickable: React.FC<{ onClick: () => void; children: React.ReactNode; className?: string }> = ({ onClick, children, className }) => (
     <span className={`clickable ${className || ''}`} onClick={onClick}>
         {children}
     </span>
 );
 
-// --- Individual Command Implementations ---
-
+// System information command similar to Unix neofetch
 const neofetch: CommandFunction = (_args, _executeCommand, navigate): CommandOutput => {
     const pages = [
-        // Removed //Home
         { name: '//AboutMe', key: 'nf-about', path: '/about-me' },
         { name: '//MyAchievements', key: 'nf-achieve', path: '/my-achievements' },
         { name: '//MyProjects', key: 'nf-projects', path: '/my-projects' },
-        { name: '//MySkills', key: 'nf-skills', path: '/my-skills' }, // Add this line
+        { name: '//MySkills', key: 'nf-skills', path: '/my-skills' },
         { name: '//Contact', key: 'nf-contact', path: '/contact' },
     ];
     return [
@@ -54,12 +50,11 @@ const neofetch: CommandFunction = (_args, _executeCommand, navigate): CommandOut
         <div key="nf-user"><span className="neofetch-label">User:</span> Andrei Banu</div>,
         '\u00A0',
         <div key="nf-pages-title"><span className="neofetch-label">Available Pages:</span></div>,
-        // Make page names clickable and use navigate
         ...pages.map(page => (
             <Clickable
                 key={page.key}
                 className="page-name"
-                onClick={() => navigate(page.path)} // Use navigate here
+                onClick={() => navigate(page.path)}
             >
                 {'  '}{page.name}
             </Clickable>
@@ -71,12 +66,13 @@ const neofetch: CommandFunction = (_args, _executeCommand, navigate): CommandOut
     ];
 };
 
+// Help command showing available commands and their descriptions
 const help: CommandFunction = (_args, executeCommand, _navigate): CommandOutput => {
     const commandDetails = [
         { cmd: 'help', desc: 'Show this help message', action: () => executeCommand('help') },
         { cmd: 'clear', desc: 'Clear the terminal screen', action: () => executeCommand('clear') },
-        { cmd: 'ls', desc: 'List available pages (AboutMe, MyAchievements, MyProjects, MySkills, Contact)', action: () => executeCommand('ls') }, // Updated description
-        { cmd: 'goto [page]', desc: 'Navigate to a page (e.g., goto //AboutMe)', clickable: false }, // Mark goto as not directly clickable
+        { cmd: 'ls', desc: 'List available pages (AboutMe, MyAchievements, MyProjects, MySkills, Contact)', action: () => executeCommand('ls') },
+        { cmd: 'goto [page]', desc: 'Navigate to a page (e.g., goto //AboutMe)', clickable: false },
         { cmd: 'neofetch', desc: 'Display system information', action: () => executeCommand('neofetch') },
     ];
     const commandColWidth = 15;
@@ -89,12 +85,11 @@ const help: CommandFunction = (_args, executeCommand, _navigate): CommandOutput 
                 {item.clickable !== false && item.action ? (
                     <Clickable
                         className="command-name"
-                        onClick={item.action} // Use action for clickable commands
+                        onClick={item.action}
                     >
                         {'  '}{item.cmd}
                     </Clickable>
                 ) : (
-                    // Render non-clickable command name
                     <span className="command-name">{'  '}{item.cmd}</span>
                 )}
                 {padding}
@@ -105,13 +100,13 @@ const help: CommandFunction = (_args, executeCommand, _navigate): CommandOutput 
     return output;
 };
 
+// List directory contents (available pages)
 const ls: CommandFunction = (_args, _executeCommand, navigate): CommandOutput => {
     const pages = [
-        // Removed //Home
         { name: '//AboutMe', key: 'ls-about', path: '/about-me' },
         { name: '//MyAchievements', key: 'ls-achieve', path: '/my-achievements' },
         { name: '//MyProjects', key: 'ls-projects', path: '/my-projects' },
-        { name: '//MySkills', key: 'ls-skills', path: '/my-skills' }, // Add this line
+        { name: '//MySkills', key: 'ls-skills', path: '/my-skills' },
         { name: '//Contact', key: 'ls-contact', path: '/contact' },
     ];
     return [
@@ -121,7 +116,7 @@ const ls: CommandFunction = (_args, _executeCommand, navigate): CommandOutput =>
             <Clickable
                 key={page.key}
                 className="page-name"
-                onClick={() => navigate(page.path)} // Use navigate here
+                onClick={() => navigate(page.path)}
             >
                 {'  '}{page.name}
             </Clickable>
@@ -134,20 +129,19 @@ const pagePaths: Record<string, string> = {
     '//aboutme': '/about-me',
     '//myachievements': '/my-achievements',
     '//myprojects': '/my-projects',
-    '//myskills': '/my-skills', // Add this line
+    '//myskills': '/my-skills',
     '//contact': '/contact',
 };
 
+// Navigation command to switch between pages
 const goto: CommandFunction = (args, _executeCommand, navigate): CommandOutput => {
     if (args.length === 1 && args[0].startsWith('//')) {
         const requestedPage = args[0].toLowerCase();
-        const pageName = args[0]; // Keep original casing for output
+        const pageName = args[0];
 
         if (requestedPage in pagePaths) {
             const path = pagePaths[requestedPage];
-            // Use navigate for actual navigation
             navigate(path);
-            // Return a message indicating navigation (optional, as the page will change)
             return [`Navigating to ${pageName}...`];
         } else {
             return [ <span key="goto-err-invalid" className="error-message">Error: Page "{pageName}" not found. Use 'ls' to see available pages.</span> ];
@@ -157,18 +151,14 @@ const goto: CommandFunction = (args, _executeCommand, navigate): CommandOutput =
     }
 };
 
-// --- Commands Object ---
-// Maps command strings to their functions
 export const commands: Record<string, CommandFunction> = {
     neofetch,
     help,
     ls,
     goto,
-    // Add new commands here:
-    // 'echo': echoCommand,
 };
 
-// --- Function to handle unknown commands ---
+// Handles unrecognized commands with helpful error message
 export const unknownCommand = (command: string): CommandOutput => {
     return [
         <span key={`err-${command}`} className="error-message">Command not found: {command}</span>,

@@ -5,7 +5,7 @@ interface BootSequenceProps {
     onComplete: () => void;
 }
 
-// --- GRUB Menu Simulation (remains the same) ---
+// GRUB bootloader menu simulation for authentic Linux boot experience
 const grubMenu = `
  GNU GRUB version 2.06
 
@@ -29,7 +29,7 @@ const grubMenu = `
  Booting \`PortfolioOS v1.0 (6.1.0-andrei-generic)\` in 1...
 `;
 
-// --- Your existing boot messages ---
+// Simulated Linux boot messages for realistic startup sequence
 const bootMessages = [
     <span>Initializing BIOS... <span className="boot-ok">[ OK ]</span></span>,
     <span><span className="boot-info">[INFO]</span> CPU: Intel(R) Xeon(R) CPU E5-2690 v4 @ 2.60GHz stepping 01</span>,
@@ -65,7 +65,7 @@ const bootMessages = [
     <span><span className="boot-info">[INFO]</span> Starting Network Manager...</span>,
     <span><span className="boot-ok">[ OK ]</span> Started <span className="boot-service">Network Manager</span>.</span>,
     <span><span className="boot-ok">[ OK ]</span> Reached target Network.</span>,
-    <span><span className="boot-ok">[ OK ]</span> Reached target Network is Online.</span>, // Added network online target
+    <span><span className="boot-ok">[ OK ]</span> Reached target Network is Online.</span>,
     <span><span className="boot-info">[INFO]</span> Starting SSH Server...</span>,
     <span><span className="boot-ok">[ OK ]</span> Started <span className="boot-service">OpenSSH server daemon</span>.</span>,
     <span><span className="boot-info">[INFO]</span> Starting Web Server...</span>,
@@ -84,36 +84,30 @@ const bootMessages = [
     <span> </span>,
 ];
 
-// --- BootSequence Component ---
 const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
     const [visibleLines, setVisibleLines] = useState<React.ReactNode[]>([]);
     const [lineIndex, setLineIndex] = useState(0);
     const terminalRef = useRef<HTMLDivElement>(null);
-    // REMOVED: audioRef
 
-    // REMOVED: Effect for Audio Playback and Control
-
-    // Effect to add lines and scroll
+    // Main effect controlling the boot sequence timing and progression
     useEffect(() => {
         let timeoutId: number | null = null;
         let completionTimeout: number | null = null;
 
         if (lineIndex < bootMessages.length) {
-            // Slower, more varied delay
             let delay = Math.random() * 80 + 50;
             const currentMessage = bootMessages[lineIndex];
 
-            // Add a significant delay before the very first line appears
             if (lineIndex === 0) {
-                delay = 1000; // 1 second delay before boot starts
+                delay = 1000;
             } else if (React.isValidElement(currentMessage) && currentMessage.key === 'grub') {
-                delay = 200; // Slower GRUB menu appearance
+                delay = 200;
 // @ts-ignore
             } else if (typeof currentMessage === 'string' && currentMessage.includes('Booting')) {
-                delay = 1000; // Slower "Booting in..." message
+                delay = 1000;
 // @ts-ignore
             } else if (typeof currentMessage === 'string' && currentMessage.includes('login:')) {
-                delay = 400; // Slower login prompt
+                delay = 400;
             }
 
             timeoutId = setTimeout(() => {
@@ -141,7 +135,6 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
     }, [visibleLines]);
 
     return (
-        // Added 'booting' class to hide scrollbar
         <div className="terminal booting" ref={terminalRef}>
             {visibleLines.map((line, index) => (
                 <div key={`boot-${index}`}>

@@ -2,23 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import '../../styles/App.css';
 
-// Session storage key
 const BOOT_COMPLETED_KEY = 'portfolioBootCompleted';
 
+// Navigation structure for the portfolio
 const navPages = [
     { name: 'Terminal', path: '/' },
     { name: 'About Me', path: '/about-me' },
     { name: 'My Achievements', path: '/my-achievements' },
     { name: 'My Projects', path: '/my-projects' },
-    { name: 'My Skills', path: '/my-skills' }, // Add this line
+    { name: 'My Skills', path: '/my-skills' },
     { name: 'Contact', path: '/contact' },
 ];
 
 const Layout: React.FC = () => {
+    // Navigation overlay state
     const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+    // Navigation button visibility (shown after boot sequence)
     const [isButtonVisible, setIsButtonVisible] = useState<boolean>(() => {
         return sessionStorage.getItem(BOOT_COMPLETED_KEY) === 'true';
     });
+    // CRT screen effect toggle
     const [isCrtEffectActive, setIsCrtEffectActive] = useState<boolean>(false);
 
     const location = useLocation();
