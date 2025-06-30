@@ -91,8 +91,8 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
 
     // Main effect controlling the boot sequence timing and progression
     useEffect(() => {
-        let timeoutId: number | null = null;
-        let completionTimeout: number | null = null;
+        let timeoutId: ReturnType<typeof setTimeout> | null = null;
+        let completionTimeout: ReturnType<typeof setTimeout> | null = null;
 
         if (lineIndex < bootMessages.length) {
             let delay = Math.random() * 80 + 50;
