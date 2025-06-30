@@ -72,43 +72,63 @@
 .retro-terminal-header {
   display: flex;
   align-items: center;
-  background-color: #333;
+  background: linear-gradient(to bottom, #4a4a4a, #2d2d2d);
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
-  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #1a1a1a;
+  padding: 0.4rem 1rem;
   width: 100%; /* Ensure header spans full width */
   flex-shrink: 0; /* Prevent header from shrinking */
   min-height: 2.5rem; /* Ensure minimum height for visibility */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .header-buttons {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.3rem;
 }
 
 .header-button {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  border: 1px solid #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(to bottom, #5a5a5a, #3a3a3a);
+  cursor: pointer;
+  transition: all 0.1s ease;
 }
 
-.header-button:nth-child(1) {
-  background-color: #ff5f56;
+.header-button:hover {
+  background: linear-gradient(to bottom, #6a6a6a, #4a4a4a);
 }
 
-.header-button:nth-child(2) {
-  background-color: #ffbd2e;
+.header-button:nth-child(1)::after {
+  content: "×";
+  font-size: 12px;
 }
 
-.header-button:nth-child(3) {
-  background-color: #27c93f;
+.header-button:nth-child(2)::after {
+  content: "−";
+  font-size: 10px;
+}
+
+.header-button:nth-child(3)::after {
+  content: "□";
+  font-size: 8px;
 }
 
 .terminal-title {
   margin-left: auto;
-  margin-right: 25px;
+  padding-right: 1rem;
   font-size: 0.85rem;
-  color: #aaa;
+  color: #ddd;
+  font-weight: 500;
   white-space: nowrap; /* Prevent text wrapping */
   overflow: visible; /* Ensure text is always visible */
   text-overflow: clip; /* Prevent ellipsis */
