@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import BootSequence from './BootSequence';
-import './App.css';
-import { commands, unknownCommand, CommandOutput } from './commands.tsx';
+import { BootSequence } from './components';
+import './styles/App.css';
+import { commands, unknownCommand, CommandOutput } from './utils/commands';
 
 // Key for sessionStorage
 const BOOT_COMPLETED_KEY = 'portfolioBootCompleted';

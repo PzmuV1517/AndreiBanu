@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './App.css';
+import '../../styles/App.css';
 
 interface BootSequenceProps {
     onComplete: () => void;
@@ -95,8 +95,8 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
 
     // Effect to add lines and scroll
     useEffect(() => {
-        let timeoutId: NodeJS.Timeout | null = null;
-        let completionTimeout: NodeJS.Timeout | null = null;
+        let timeoutId: number | null = null;
+        let completionTimeout: number | null = null;
 
         if (lineIndex < bootMessages.length) {
             // Slower, more varied delay

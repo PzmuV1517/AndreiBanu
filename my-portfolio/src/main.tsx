@@ -2,16 +2,11 @@ import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import Layout from './Layout.tsx'; // Import the new Layout component
+import { Layout, AboutMe, MyAchievements, MyProjects, MySkills, Contact } from './components'; // Import components
 import App from './App.tsx'; // Terminal App
-import AboutMe from './AboutMe.tsx';
-import MyAchievements from './MyAchievements.tsx';
-import MyProjects from './MyProjects.tsx';
-import MySkills from './MySkills.tsx'; // Add this import
-import Contact from './Contact.tsx';
 
-import './index.css';
-import './App.css';
+import './styles/index.css';
+import './styles/App.css';
 
 const router = createBrowserRouter([
 	{
