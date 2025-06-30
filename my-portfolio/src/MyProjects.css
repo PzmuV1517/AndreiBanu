@@ -23,7 +23,7 @@
 .back-to-terminal-btn {
   position: fixed;
   top: 1rem;
-  left: 1rem;
+  left: 2rem;
   background-color: #1a1a1a;
   color: #5beeff;
   border: 1px solid rgba(91, 238, 255, 0.3);
@@ -251,6 +251,18 @@ em {
 .terminal-link::before {
   content: '';
   margin-right: 0.5rem;
+}
+
+.github-link {
+  color: #ffd700;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.github-link:hover {
+  color: #fff;
+  text-decoration: underline;
 }
 
 /* Responsive adjustments */

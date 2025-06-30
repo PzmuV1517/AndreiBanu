@@ -23,7 +23,7 @@
 .back-to-terminal-btn {
   position: fixed;
   top: 1rem;
-  left: 1rem;
+  left: 2rem;
   background-color: #1a1a1a;
   color: #5beeff;
   border: 1px solid rgba(91, 238, 255, 0.3);

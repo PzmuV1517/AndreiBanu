@@ -141,6 +141,18 @@ const MyProjects: React.FC = () => {
                 Each project represents a unique challenge that pushed me to learn new technologies 
                 and develop creative approaches to complex problems.
               </p>
+              <p>
+                You can explore the source code and technical details for many of these projects on my{' '}
+                <a 
+                  href="https://github.com/PzmuV1517" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="github-link"
+                >
+                  GitHub profile
+                </a>
+                , where I share my ongoing work and collaborate with the developer community.
+              </p>
             </div>
           </div>
 

@@ -259,7 +259,7 @@ body {
 .easy-mode-button {
   position: fixed;
   top: 15px;
-  right: 15px;
+  right: 2rem;
   z-index: 1000;
   background-color: #00ffff;
   color: #000000;
