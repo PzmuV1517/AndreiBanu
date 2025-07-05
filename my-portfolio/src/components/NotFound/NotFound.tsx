@@ -119,7 +119,6 @@ const backgroundComponents = [
 const NotFound: React.FC = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [selectedBackground, setSelectedBackground] = useState(0);
-  const [debugMenuOpen, setDebugMenuOpen] = useState(false);
 
   useEffect(() => {
     // Randomly select a background component on mount
@@ -129,11 +128,6 @@ const NotFound: React.FC = () => {
 
   const toggleOverlay = () => setIsOverlayOpen(!isOverlayOpen);
   const closeOverlay = () => setIsOverlayOpen(false);
-  const toggleDebugMenu = () => setDebugMenuOpen(!debugMenuOpen);
-  const selectBackground = (index: number) => {
-    setSelectedBackground(index);
-    setDebugMenuOpen(false);
-  };
 
   const BackgroundComponent = backgroundComponents[selectedBackground].component;
   const backgroundProps = backgroundComponents[selectedBackground].props;
@@ -165,67 +159,6 @@ const NotFound: React.FC = () => {
         </svg>
         <span className="button-text">Menu</span>
       </button>
-
-      {/* Debug Background Selector */}
-      <div style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 1000 }}>
-        <button
-          onClick={toggleDebugMenu}
-          style={{
-            padding: '8px 12px',
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
-            color: 'white',
-            border: '1px solid #555',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '12px',
-            fontFamily: 'monospace'
-          }}
-        >
-          Debug: {backgroundComponents[selectedBackground].name}
-        </button>
-        
-        {debugMenuOpen && (
-          <div style={{
-            position: 'absolute',
-            top: '100%',
-            right: '0',
-            marginTop: '5px',
-            backgroundColor: 'rgba(0, 0, 0, 0.9)',
-            border: '1px solid #555',
-            borderRadius: '4px',
-            minWidth: '150px',
-            maxHeight: '300px',
-            overflowY: 'auto'
-          }}>
-            {backgroundComponents.map((bg, index) => (
-              <button
-                key={bg.name}
-                onClick={() => selectBackground(index)}
-                style={{
-                  display: 'block',
-                  width: '100%',
-                  padding: '8px 12px',
-                  backgroundColor: selectedBackground === index ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
-                  color: 'white',
-                  border: 'none',
-                  textAlign: 'left',
-                  cursor: 'pointer',
-                  fontSize: '12px',
-                  fontFamily: 'monospace'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = selectedBackground === index ? 'rgba(255, 255, 255, 0.2)' : 'transparent';
-                }}
-              >
-                {index + 1}. {bg.name}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
 
       {/* Navigation Overlay */}
       {isOverlayOpen && (
