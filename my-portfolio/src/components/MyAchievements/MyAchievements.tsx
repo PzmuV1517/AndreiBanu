@@ -1,34 +1,59 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import DecryptText from '../DecryptText';
+import Dither from '../Dither';
 import './MyAchievements.css';
 
 const MyAchievements: React.FC = () => {
-  const [displayedText, setDisplayedText] = useState('');
-  const [showCursor, setShowCursor] = useState(true);
-  const fullText = "> My Achievements & Awards_";
-
+  // Global mouse event listener for Dither reactivity
   useEffect(() => {
-    if (displayedText.length < fullText.length) {
-      const timeout = setTimeout(() => {
-        setDisplayedText(fullText.slice(0, displayedText.length + 1));
-      }, 100);
-      return () => clearTimeout(timeout);
-    } else {
-      // Start cursor blinking
-      const cursorInterval = setInterval(() => {
-        setShowCursor(prev => !prev);
-      }, 500);
-      return () => clearInterval(cursorInterval);
-    }
-  }, [displayedText, fullText]);
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      const ditherCanvas = document.querySelector('canvas');
+      if (ditherCanvas) {
+        const mouseEvent = new MouseEvent('pointermove', {
+          clientX: e.clientX,
+          clientY: e.clientY,
+          bubbles: true
+        });
+        ditherCanvas.dispatchEvent(mouseEvent);
+      }
+    };
 
+    document.addEventListener('mousemove', handleGlobalMouseMove);
+
+    return () => {
+      document.removeEventListener('mousemove', handleGlobalMouseMove);
+    };
+  }, []);
   return (
-    <div className="achievements-container">
+    <div className="achievements-container" style={{ position: 'relative' }}>
+      {/* Dither background behind the entire text file window */}
+      <div style={{ 
+        position: 'fixed', 
+        top: 0, 
+        left: 0, 
+        width: '100vw', 
+        height: '100vh', 
+        zIndex: 0,
+        pointerEvents: 'none' 
+      }}>
+        <Dither
+          waveColor={[0.5, 0.5, 0.5]}
+          disableAnimation={false}
+          enableMouseInteraction={true}
+          mouseRadius={0.2}
+          colorNum={4}
+          waveAmplitude={0.3}
+          waveFrequency={3.4}
+          waveSpeed={0.05}
+        />
+      </div>
+
       <Link to="/" className="back-to-terminal-btn">
         ← Terminal
       </Link>
       
-      <div className="achievements-content">
+      <div className="achievements-content" style={{ position: 'relative', zIndex: 1 }}>
         <div className="retro-terminal-header">
           <div className="header-buttons">
             <div className="header-button"></div>
@@ -40,10 +65,16 @@ const MyAchievements: React.FC = () => {
         
         <div className="achievements-body">
           <h1 className="achievements-title">
-            <div className="typewriter-container">
-              <span className="typewriter-text">{displayedText}</span>
-              <span className={`cursor ${showCursor ? '' : 'blink'}`}></span>
-            </div>
+            <DecryptText 
+              text="> My Achievements & Awards_" 
+              animateOn="view"
+              sequential={true}
+              useOriginalCharsOnly={false}
+              revealDirection="start"
+              speed={60}
+              maxIterations={10}
+              className="typewriter-text"
+            />
           </h1>
 
           <div className="achievements-description">

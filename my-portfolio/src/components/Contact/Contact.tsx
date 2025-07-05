@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import DecryptText from '../DecryptText';
+import Dither from '../Dither';
 import './Contact.css';
 
 const Contact: React.FC = () => {
-  const [displayedText, setDisplayedText] = useState('');
-  const [showCursor, setShowCursor] = useState(true);
-  const fullText = "> Contact Me_";
-
   // Force the page to be visible on mount
   useEffect(() => {
     // Force the page to be visible
@@ -15,29 +13,30 @@ const Contact: React.FC = () => {
     document.body.style.padding = '0';
     document.body.style.overflow = 'auto';
     
+    // Global mouse move handler to ensure Dither reactivity everywhere
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      const ditherCanvas = document.querySelector('canvas');
+      if (ditherCanvas) {
+        const mouseEvent = new MouseEvent('pointermove', {
+          clientX: e.clientX,
+          clientY: e.clientY,
+          bubbles: true
+        });
+        ditherCanvas.dispatchEvent(mouseEvent);
+      }
+    };
+
+    document.addEventListener('mousemove', handleGlobalMouseMove);
+    
     // Cleanup function to restore original styles
     return () => {
       document.body.style.backgroundColor = '';
       document.body.style.margin = '';
       document.body.style.padding = '';
       document.body.style.overflow = '';
+      document.removeEventListener('mousemove', handleGlobalMouseMove);
     };
   }, []);
-
-  useEffect(() => {
-    if (displayedText.length < fullText.length) {
-      const timeout = setTimeout(() => {
-        setDisplayedText(fullText.slice(0, displayedText.length + 1));
-      }, 100);
-      return () => clearTimeout(timeout);
-    } else {
-      // Start cursor blinking
-      const cursorInterval = setInterval(() => {
-        setShowCursor(prev => !prev);
-      }, 500);
-      return () => clearInterval(cursorInterval);
-    }
-  }, [displayedText, fullText]);
 
   const handleEmailClick = (email: string) => {
     window.location.href = `mailto:${email}`;
@@ -62,12 +61,34 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <div className="contact-container">
+    <div className="contact-container" style={{ position: 'relative' }}>
+      {/* Dither background behind the entire text file window */}
+      <div style={{ 
+        position: 'fixed', 
+        top: 0, 
+        left: 0, 
+        width: '100vw', 
+        height: '100vh', 
+        zIndex: 0,
+        pointerEvents: 'none' 
+      }}>
+        <Dither
+          waveColor={[0.5, 0.5, 0.5]}
+          disableAnimation={false}
+          enableMouseInteraction={true}
+          mouseRadius={0.2}
+          colorNum={4}
+          waveAmplitude={0.3}
+          waveFrequency={3.4}
+          waveSpeed={0.05}
+        />
+      </div>
+
       <Link to="/" className="back-to-terminal-btn">
         ← Terminal
       </Link>
       
-      <div className="contact-content">
+      <div className="contact-content" style={{ position: 'relative', zIndex: 1 }}>
         <div className="retro-terminal-header">
           <div className="header-buttons">
             <div className="header-button"></div>
@@ -79,10 +100,16 @@ const Contact: React.FC = () => {
         
         <div className="contact-body">
           <h1 className="contact-title">
-            <div className="typewriter-container">
-              <span className="typewriter-text">{displayedText}</span>
-              <span className={`cursor ${showCursor ? '' : 'blink'}`}></span>
-            </div>
+            <DecryptText 
+              text="> Contact Me_" 
+              animateOn="view"
+              sequential={true}
+              useOriginalCharsOnly={false}
+              revealDirection="start"
+              speed={60}
+              maxIterations={10}
+              className="typewriter-text"
+            />
           </h1>
 
           <div className="contact-description">

@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import DecryptText from '../DecryptText';
+import ASCIIText from '../ASCIIText';
+import Dither from '../Dither';
 import './AboutMe.css';
 
 const AboutMe: React.FC = () => {
-  // State for typewriter effect
-  const [displayedText, setDisplayedText] = useState('');
-  const [showCursor, setShowCursor] = useState(true);
-  const fullText = '> Andrei Banu_';
-  const typingSpeed = 120; // milliseconds per character
-
   // Setup page styling and cleanup on component mount/unmount
   useEffect(() => {
     document.body.style.backgroundColor = '#121212';
@@ -16,37 +13,61 @@ const AboutMe: React.FC = () => {
     document.body.style.padding = '0';
     document.body.style.overflow = 'auto';
 
+    // Global mouse move handler to ensure Dither reactivity everywhere
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      const ditherCanvas = document.querySelector('canvas');
+      if (ditherCanvas) {
+        const mouseEvent = new MouseEvent('pointermove', {
+          clientX: e.clientX,
+          clientY: e.clientY,
+          bubbles: true
+        });
+        ditherCanvas.dispatchEvent(mouseEvent);
+      }
+    };
+
+    document.addEventListener('mousemove', handleGlobalMouseMove);
+
     return () => {
       document.body.style.backgroundColor = '';
       document.body.style.margin = '';
       document.body.style.padding = '';
       document.body.style.overflow = '';
+      document.removeEventListener('mousemove', handleGlobalMouseMove);
     };
   }, []);
 
-  // Typewriter effect for the header text
-  useEffect(() => {
-    if (displayedText.length < fullText.length) {
-      const timeout = setTimeout(() => {
-        setDisplayedText(fullText.slice(0, displayedText.length + 1));
-      }, typingSpeed);
-      return () => clearTimeout(timeout);
-    } else {
-      // Start cursor blinking animation once typing is complete
-      const cursorInterval = setInterval(() => {
-        setShowCursor(prev => !prev);
-      }, 500);
-      return () => clearInterval(cursorInterval);
-    }
-  }, [displayedText, fullText]);
-
   return (
-    <div className="about-me-container">
+    <div className="about-me-container" style={{ position: 'relative' }}>
+      {/* Dither background behind the entire text file window */}
+      <div style={{ 
+        position: 'fixed', 
+        top: 0, 
+        left: 0, 
+        width: '100vw', 
+        height: '100vh', 
+        zIndex: 0,
+        pointerEvents: 'none' 
+      }}>
+        <Dither
+          waveColor={[0.5, 0.5, 0.5]}
+          disableAnimation={false}
+          enableMouseInteraction={true}
+          mouseRadius={0.2}
+          colorNum={4}
+          waveAmplitude={0.3}
+          waveFrequency={3.4}
+          waveSpeed={0.05}
+        />
+      </div>
+
+      {/* Transparent overlay for global mouse capture - no longer needed with global listener */}
+
       <Link to="/" className="back-to-terminal-btn">
         ← Terminal
       </Link>
 
-      <div className="about-me-content">
+      <div className="about-me-content" style={{ position: 'relative', zIndex: 1 }}>
         <div className="retro-terminal-header">
           <div className="header-buttons">
             <span className="header-button"></span>
@@ -58,11 +79,31 @@ const AboutMe: React.FC = () => {
 
         <div className="about-me-body">
           <h1 className="about-me-title">
-            <div className="typewriter-container">
-              <span className="typewriter-text">{displayedText}</span>
-              {showCursor && <span className="cursor">|</span>}
-            </div>
+            <DecryptText 
+              text="> Andrei Banu_" 
+              animateOn="view"
+              sequential={true}
+              useOriginalCharsOnly={false}
+              revealDirection="start"
+              speed={60}
+              maxIterations={10}
+              className="typewriter-text"
+            />
           </h1>
+
+          {/* ASCII Text Display */}
+          <div className="ascii-text-section" style={{ 
+            height: '500px', 
+            width: '100%', 
+            margin: '-80px 0',
+            position: 'relative'
+          }}>
+            <ASCIIText
+              text='Hey!'
+              enableWaves={true}
+              asciiFontSize={8}
+            />
+          </div>
 
           <div className="about-me-description">
             <p>

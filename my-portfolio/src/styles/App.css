@@ -531,3 +531,44 @@ body {
   }
 }
 /* --- End CRT Effect --- */
+
+/* --- DecryptText Component Styles --- */
+.decrypt-text {
+  display: inline-block;
+  font-family: inherit;
+}
+
+.decrypt-text.decrypting {
+  animation: decrypt-glow 0.1s ease-in-out infinite alternate;
+}
+
+.decrypt-text .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes decrypt-glow {
+  0% {
+    text-shadow: 0 0 2px #00ff00, 0 0 4px #00ff00;
+  }
+  100% {
+    text-shadow: 0 0 4px #00ff00, 0 0 8px #00ff00;
+  }
+}
+
+/* Utility classes for whitespace handling */
+.whitespace-pre-wrap {
+  white-space: pre-wrap;
+}
+
+.inline-block {
+  display: inline-block;
+}
+/* --- End DecryptText Component Styles --- */

@@ -1,4 +1,4 @@
-/* Contact.css - Retro styled contact page with interactive buttons */
+/* Contact.css - Retro styled contact page with interacti  background-color: rgba(26, 26, 26, 0.92); /* 8% transparent (92% opacity) */e buttons */
 
 .contact-container {
   width: 100vw; /* Full viewport width */
@@ -55,7 +55,7 @@
   border: 1px solid rgba(114, 114, 114, 0.4);
   border-radius: 6px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-  background-color: #1a1a1a; /* Dark but visible background */
+  background-color: rgba(26, 26, 26, 0.88); /* 12% transparent (88% opacity) */
   display: flex;
   flex-direction: column;
   overflow: hidden; /* Ensure content doesn't spill outside border */
