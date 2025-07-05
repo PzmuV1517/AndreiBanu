@@ -164,8 +164,3 @@
 .easy-mode-button {
   pointer-events: auto;
 }
-
-/* Ensure debug menu can still receive clicks */
-button[style*="backgroundColor"] {
-  pointer-events: auto;
-}
