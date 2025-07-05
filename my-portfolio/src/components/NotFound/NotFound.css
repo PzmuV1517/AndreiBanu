@@ -1,0 +1,171 @@
+.not-found-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+  padding: 2rem;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.background-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.not-found-box {
+  background: rgba(26, 26, 26, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  padding: 2rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  min-width: 250px;
+  max-width: 380px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+.fuzzy-text-large {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.fuzzy-text-small {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+  margin-top: -0.5rem;
+}
+
+  .fun-fact-text {
+    font-size: 0.8rem;
+  }
+
+  .return-to-terminal {
+    margin-top: 1rem;
+  }
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .not-found-container {
+    padding: 1rem;
+  }
+  
+  .not-found-box {
+    padding: 1.5rem 2.5rem;
+    min-width: 200px;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .not-found-box {
+    padding: 1.25rem 2rem;
+    min-width: 180px;
+    gap: 0.5rem;
+  }
+  
+  .fun-fact-text {
+    font-size: 0.75rem;
+  }
+
+  .fuzzy-text-small {
+    margin-top: -0.125rem;
+  }
+}
+
+.return-to-terminal {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.terminal-link {
+  color: #5beeff;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.9rem;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  transition: color 0.2s, transform 0.2s;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: 1px solid rgba(91, 238, 255, 0.3);
+}
+
+.terminal-link:hover {
+  color: #fff;
+  transform: translateX(-3px);
+  background-color: rgba(91, 238, 255, 0.1);
+  border-color: #5beeff;
+}
+
+.terminal-link::before {
+  content: '';
+  margin-right: 0.5rem;
+}
+
+.fun-fact {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  backdrop-filter: blur(5px);
+}
+
+.fun-fact-text {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: #cccccc;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  pointer-events: auto;
+}
+
+.fun-fact-label {
+  color: #5beeff;
+  font-weight: 600;
+}
+
+/* Enable pointer events for all interactive elements */
+.terminal-link {
+  pointer-events: auto;
+}
+
+.fuzzy-text-large,
+.fuzzy-text-small {
+  pointer-events: auto;
+}
+
+/* Ensure buttons can still receive clicks */
+.easy-mode-button {
+  pointer-events: auto;
+}
+
+/* Ensure debug menu can still receive clicks */
+button[style*="backgroundColor"] {
+  pointer-events: auto;
+}

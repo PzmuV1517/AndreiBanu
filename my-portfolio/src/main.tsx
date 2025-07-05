@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { Layout, AboutMe, MyAchievements, MyProjects, MySkills, Contact } from './components';
+import { Layout, AboutMe, MyAchievements, MyProjects, MySkills, Contact, NotFound } from './components';
 import App from './App.tsx';
 
 import './styles/index.css';
@@ -21,6 +21,10 @@ const router = createBrowserRouter([
 			{ path: 'my-skills', element: <MySkills /> },
 			{ path: 'contact', element: <Contact /> },
 		],
+	},
+	{
+		path: '*',
+		element: <NotFound />,
 	},
 ]);
 

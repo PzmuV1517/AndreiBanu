@@ -115,6 +115,14 @@ const Particles: React.FC<ParticlesProps> = ({
     container.appendChild(gl.canvas);
     gl.clearColor(0, 0, 0, 0);
 
+    // Style the canvas to fill the container
+    gl.canvas.style.width = '100%';
+    gl.canvas.style.height = '100%';
+    gl.canvas.style.display = 'block';
+    gl.canvas.style.position = 'absolute';
+    gl.canvas.style.top = '0';
+    gl.canvas.style.left = '0';
+
     const camera = new Camera(gl, { fov: 15 });
     camera.position.set(0, 0, cameraDistance);
 
@@ -239,6 +247,15 @@ const Particles: React.FC<ParticlesProps> = ({
     <div
       ref={containerRef}
       className={`relative w-full h-full ${className}`}
+      style={{
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        overflow: 'hidden',
+        pointerEvents: moveParticlesOnHover ? 'auto' : 'none'
+      }}
     />
   );
 };
