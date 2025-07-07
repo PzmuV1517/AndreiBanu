@@ -2,7 +2,7 @@ import { StrictMode, Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { Layout } from './components';
+import { Layout, LoadingSpinner } from './components';
 import App from './App.tsx';
 
 import './styles/index.css';
@@ -17,19 +17,8 @@ const Contact = lazy(() => import('./components/Contact'));
 const NotFound = lazy(() => import('./components/NotFound'));
 
 // Loading component for page transitions
-const PageLoadingFallback = () => (
-  <div style={{
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh',
-    backgroundColor: '#121212',
-    color: '#5beeff',
-    fontFamily: '"Space Mono", "Courier New", monospace',
-    fontSize: '1.2rem'
-  }}>
-    Loading...
-  </div>
+const PageLoadingFallback = ({ message = "Loading page..." }: { message?: string }) => (
+  <LoadingSpinner message={message} variant="terminal" size="medium" />
 );
 
 // Router configuration with nested routes under Layout
@@ -42,7 +31,7 @@ const router = createBrowserRouter([
 			{ 
 				path: 'about-me', 
 				element: (
-					<Suspense fallback={<PageLoadingFallback />}>
+					<Suspense fallback={<PageLoadingFallback message="cat about_me.txt" />}>
 						<AboutMe />
 					</Suspense>
 				)
@@ -50,7 +39,7 @@ const router = createBrowserRouter([
 			{ 
 				path: 'my-achievements', 
 				element: (
-					<Suspense fallback={<PageLoadingFallback />}>
+					<Suspense fallback={<PageLoadingFallback message="cat achievements.txt" />}>
 						<MyAchievements />
 					</Suspense>
 				)
@@ -58,7 +47,7 @@ const router = createBrowserRouter([
 			{ 
 				path: 'my-projects', 
 				element: (
-					<Suspense fallback={<PageLoadingFallback />}>
+					<Suspense fallback={<PageLoadingFallback message="cat projects.txt" />}>
 						<MyProjects />
 					</Suspense>
 				)
@@ -66,7 +55,7 @@ const router = createBrowserRouter([
 			{ 
 				path: 'my-skills', 
 				element: (
-					<Suspense fallback={<PageLoadingFallback />}>
+					<Suspense fallback={<PageLoadingFallback message="cat skills.txt" />}>
 						<MySkills />
 					</Suspense>
 				)
@@ -74,7 +63,7 @@ const router = createBrowserRouter([
 			{ 
 				path: 'contact', 
 				element: (
-					<Suspense fallback={<PageLoadingFallback />}>
+					<Suspense fallback={<PageLoadingFallback message="cat contact.txt" />}>
 						<Contact />
 					</Suspense>
 				)
@@ -84,7 +73,7 @@ const router = createBrowserRouter([
 	{
 		path: '*',
 		element: (
-			<Suspense fallback={<PageLoadingFallback />}>
+			<Suspense fallback={<PageLoadingFallback message="ls /dev/null" />}>
 				<NotFound />
 			</Suspense>
 		),

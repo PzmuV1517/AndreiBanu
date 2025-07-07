@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import FuzzyText from '../404Backgrounds/FuzzyText';
+import LoadingSpinner from '../LoadingSpinner';
 import './NotFound.css';
 import '../../styles/App.css';
 
@@ -138,7 +139,11 @@ const NotFound: React.FC = () => {
     <div className="not-found-container">
       {/* Random Background */}
       <div className="background-wrapper">
-        <Suspense fallback={<div className="background-loading">Loading background...</div>}>
+        <Suspense fallback={
+          <div className="background-loading-wrapper">
+            <LoadingSpinner message="render background.exe" variant="minimal" size="small" />
+          </div>
+        }>
           <BackgroundComponent {...(backgroundProps as any)} />
         </Suspense>
       </div>

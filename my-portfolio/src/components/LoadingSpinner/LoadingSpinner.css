@@ -1,0 +1,202 @@
+/* LoadingSpinner.css - Terminal-themed loading component */
+
+.loading-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #121212;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  font-family: 'Space Mono', 'Courier New', monospace;
+}
+
+/* Terminal Loading Variant */
+.terminal-loading {
+  background-color: rgba(26, 26, 26, 0.95);
+  border: 1px solid rgba(91, 238, 255, 0.3);
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90vw;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.loading-header {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(to bottom, #4a4a4a, #2d2d2d);
+  border-bottom: 1px solid #1a1a1a;
+  padding: 8px 16px;
+  min-height: 32px;
+}
+
+.loading-header-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.loading-header-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: linear-gradient(to bottom, #5a5a5a, #3a3a3a);
+  border: 1px solid #2a2a2a;
+}
+
+.loading-title {
+  margin-left: auto;
+  margin-right: 16px;
+  font-size: 0.8rem;
+  color: #ddd;
+  font-weight: 500;
+}
+
+.loading-content {
+  padding: 16px;
+  min-height: 80px;
+}
+
+.loading-line {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.loading-prompt {
+  color: #5beeff;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.loading-command {
+  color: #f5f5f5;
+  font-size: 0.9rem;
+}
+
+.loading-output {
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.loading-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 16px;
+  background-color: #5beeff;
+  animation: terminal-blink 1s infinite;
+  margin-left: 2px;
+}
+
+@keyframes terminal-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.3; }
+}
+
+/* Minimal Loading Variant */
+.loading-dots {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  justify-content: center;
+}
+
+.loading-dots span {
+  color: #5beeff;
+  font-size: 2rem;
+  animation: loading-dot-bounce 1.4s infinite ease-in-out both;
+}
+
+.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+.loading-dots span:nth-child(3) { animation-delay: 0s; }
+
+@keyframes loading-dot-bounce {
+  0%, 80%, 100% { 
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% { 
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+.loading-message {
+  color: #f5f5f5;
+  font-size: 1rem;
+  text-align: center;
+  opacity: 0.8;
+}
+
+/* Size Variants */
+.loading-small .terminal-loading {
+  width: 300px;
+}
+
+.loading-small .loading-content {
+  padding: 12px;
+  min-height: 60px;
+}
+
+.loading-small .loading-prompt,
+.loading-small .loading-command,
+.loading-small .loading-output {
+  font-size: 0.8rem;
+}
+
+.loading-large .terminal-loading {
+  width: 500px;
+}
+
+.loading-large .loading-content {
+  padding: 24px;
+  min-height: 100px;
+}
+
+.loading-large .loading-prompt,
+.loading-large .loading-command,
+.loading-large .loading-output {
+  font-size: 1rem;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .terminal-loading {
+    width: 320px;
+    margin: 20px;
+  }
+  
+  .loading-content {
+    padding: 12px;
+  }
+  
+  .loading-prompt,
+  .loading-command,
+  .loading-output {
+    font-size: 0.8rem;
+  }
+  
+  .loading-title {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .terminal-loading {
+    width: 280px;
+  }
+  
+  .loading-header {
+    padding: 6px 12px;
+  }
+  
+  .loading-content {
+    padding: 10px;
+    min-height: 50px;
+  }
+}

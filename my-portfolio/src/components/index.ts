@@ -3,6 +3,7 @@ export { default as Layout } from './Layout';
 export { default as DecryptText } from './DecryptText';
 export { default as ASCIIText } from './ASCIIText';
 export { default as Dither } from './Dither';
+export { default as LoadingSpinner } from './LoadingSpinner';
 export { default as MobileTerminalEnhancements } from './MobileTerminalEnhancements';
 
 // Note: AboutMe, Contact, MyAchievements, MyProjects, MySkills, and NotFound 

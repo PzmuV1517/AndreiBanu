@@ -78,6 +78,29 @@
   z-index: 1;
 }
 
+/* Background loading wrapper for 404 page */
+.background-loading-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.background-loading-wrapper .loading-container {
+  position: relative;
+  background: transparent;
+}
+
+.background-loading-wrapper .loading-dots {
+  margin-bottom: 8px;
+}
+
+.background-loading-wrapper .loading-message {
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
 /* Responsive design for smaller screens */
 @media (max-width: 768px) {
   .not-found-container {
