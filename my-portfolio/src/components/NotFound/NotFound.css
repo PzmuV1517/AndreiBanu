@@ -65,6 +65,19 @@
     margin-top: 1rem;
   }
 
+/* Loading fallback for background components */
+.background-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #5beeff;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 1rem;
+  opacity: 0.7;
+  z-index: 1;
+}
+
 /* Responsive design for smaller screens */
 @media (max-width: 768px) {
   .not-found-container {

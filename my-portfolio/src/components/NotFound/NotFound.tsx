@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import FuzzyText from '../404Backgrounds/FuzzyText';
-import Aurora from '../404Backgrounds/Aurora';
-import Ballpit from '../404Backgrounds/Ballpit';
-import Beams from '../404Backgrounds/Beams';
-import Iridescence from '../404Backgrounds/Iridescence';
-import Particles from '../404Backgrounds/Particles';
-import Silk from '../404Backgrounds/Silk';
-import Squares from '../404Backgrounds/Squares';
-import Threads from '../404Backgrounds/Threads';
 import './NotFound.css';
 import '../../styles/App.css';
+
+// Lazy load background components for better performance
+const Aurora = lazy(() => import('../404Backgrounds/Aurora'));
+const Ballpit = lazy(() => import('../404Backgrounds/Ballpit'));
+const Beams = lazy(() => import('../404Backgrounds/Beams'));
+const Iridescence = lazy(() => import('../404Backgrounds/Iridescence'));
+const Particles = lazy(() => import('../404Backgrounds/Particles'));
+const Silk = lazy(() => import('../404Backgrounds/Silk'));
+const Squares = lazy(() => import('../404Backgrounds/Squares'));
+const Threads = lazy(() => import('../404Backgrounds/Threads'));
 
 // Navigation structure for the portfolio
 const navPages = [
@@ -136,7 +138,9 @@ const NotFound: React.FC = () => {
     <div className="not-found-container">
       {/* Random Background */}
       <div className="background-wrapper">
-        <BackgroundComponent {...(backgroundProps as any)} />
+        <Suspense fallback={<div className="background-loading">Loading background...</div>}>
+          <BackgroundComponent {...(backgroundProps as any)} />
+        </Suspense>
       </div>
 
       {/* Menu Button */}

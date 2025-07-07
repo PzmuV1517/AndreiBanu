@@ -1,12 +1,10 @@
-export { default as AboutMe } from './AboutMe';
-export { default as Contact } from './Contact';
-export { default as MyAchievements } from './MyAchievements';
-export { default as MyProjects } from './MyProjects';
-export { default as MySkills } from './MySkills';
 export { default as BootSequence } from './BootSequence';
 export { default as Layout } from './Layout';
 export { default as DecryptText } from './DecryptText';
 export { default as ASCIIText } from './ASCIIText';
 export { default as Dither } from './Dither';
-export { default as NotFound } from './NotFound';
 export { default as MobileTerminalEnhancements } from './MobileTerminalEnhancements';
+
+// Note: AboutMe, Contact, MyAchievements, MyProjects, MySkills, and NotFound 
+// are lazy-loaded in main.tsx and should not be exported here to avoid 
+// static imports that would defeat the purpose of code splitting.
