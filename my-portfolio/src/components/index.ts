@@ -9,3 +9,4 @@ export { default as DecryptText } from './DecryptText';
 export { default as ASCIIText } from './ASCIIText';
 export { default as Dither } from './Dither';
 export { default as NotFound } from './NotFound';
+export { default as MobileTerminalEnhancements } from './MobileTerminalEnhancements';

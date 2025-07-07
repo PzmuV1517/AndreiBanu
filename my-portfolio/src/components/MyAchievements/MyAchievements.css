@@ -66,6 +66,21 @@
 .achievements-body {
   padding: 2rem;
   overflow-y: auto; /* Allow scrolling within the content area */
+  flex: 1; /* Allow body to grow and fill available space */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+/* Universal text wrapping for all content */
+.achievements-content * {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Preserve specific formatting for code elements */
+.achievements-content .code {
+  word-break: break-all;
+  hyphens: none;
 }
 
 /* Rest of the existing styles */
@@ -173,10 +188,15 @@
 .achievements-description {
   font-size: 1rem;
   line-height: 1.7;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .achievements-description p {
   margin-bottom: 1.2rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .section-title {
@@ -211,11 +231,15 @@ em {
   padding-left: 1.5rem;
   margin-bottom: 1.5rem;
   position: relative;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .achievements-list li {
   margin-bottom: 0.8rem;
   position: relative;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .achievements-list li::before {
@@ -233,6 +257,8 @@ em {
 
 .achievements-list ul li {
   margin-bottom: 0.5rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .achievements-list ul li::before {
@@ -292,6 +318,10 @@ em {
     font-size: 1.8rem;
   }
   
+  .achievements-description {
+    font-size: 0.9rem;
+  }
+  
   .section-title {
     font-size: 1.2rem;
   }
@@ -302,5 +332,12 @@ em {
   
   .achievements-list li::before {
     left: -1rem;
+  }
+  
+  .back-to-terminal-btn {
+    top: 0.5rem;
+    left: 1rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
   }
 }

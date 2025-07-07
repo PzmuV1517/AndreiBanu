@@ -50,6 +50,7 @@
 
 .about-me-content {
   width: 100%; /* Full width to stretch completely */
+  max-width: 100%; /* Ensure content doesn't exceed container width */
   margin: 0; /* Remove auto margins */
   border: 1px solid rgba(114, 114, 114, 0.4);
   border-radius: 6px;
@@ -59,11 +60,27 @@
   flex-direction: column;
   overflow: hidden; /* Ensure content doesn't spill outside border */
   flex: 1; /* Allow content to grow and fill available space */
+  box-sizing: border-box; /* Include border in width calculation */
+}
+
+/* Universal text wrapping for all content */
+.about-me-content * {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Preserve specific formatting for code elements */
+.about-me-content .code {
+  word-break: break-all;
+  hyphens: none;
 }
 
 .about-me-body {
   padding: 2rem;
   overflow-y: auto; /* Allow scrolling within the content area */
+  flex: 1; /* Allow body to grow and fill available space */
+  box-sizing: border-box; /* Include padding in width calculation */
 }
 
 /* Rest of the existing styles */
@@ -76,6 +93,9 @@
   border-bottom: 1px solid #1a1a1a;
   padding: 0.4rem 1rem;
   width: 100%; /* Ensure header spans full width */
+  flex-shrink: 0; /* Prevent header from shrinking */
+  min-height: 2.5rem; /* Ensure minimum height for visibility */
+  box-sizing: border-box; /* Include padding in width calculation */
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
@@ -125,6 +145,9 @@
   font-size: 0.85rem;
   color: #ddd;
   font-weight: 500;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: clip;
 }
 
 .about-me-title {
@@ -166,10 +189,15 @@
 .about-me-description {
   font-size: 1rem;
   line-height: 1.7;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .about-me-description p {
   margin-bottom: 1.2rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .highlight {
@@ -194,11 +222,15 @@ em {
   padding-left: 1.5rem;
   margin-bottom: 1.5rem;
   position: relative;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .skills-list li {
   margin-bottom: 0.8rem;
   position: relative;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .skills-list li::before {
@@ -216,6 +248,8 @@ em {
 
 .skills-list ul li {
   margin-bottom: 0.5rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .skills-list ul li::before {
@@ -275,11 +309,27 @@ em {
     font-size: 1.8rem;
   }
   
+  .about-me-description {
+    font-size: 0.9rem;
+  }
+  
   .skills-list {
     padding-left: 1.2rem;
   }
   
   .skills-list li::before {
     left: -1rem;
+  }
+  
+  .ascii-text-section {
+    height: 300px !important;
+    margin: -40px 0 !important;
+  }
+  
+  .back-to-terminal-btn {
+    top: 0.5rem;
+    left: 1rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
   }
 }

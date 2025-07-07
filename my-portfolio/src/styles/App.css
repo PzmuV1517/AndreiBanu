@@ -46,7 +46,9 @@ body {
 .terminal-output > span,
 .terminal-output > pre {
     white-space: pre-wrap;
-    word-break: break-all;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 /* Keep specific logo styling */
 .terminal-output pre.ascii-logo {
@@ -572,3 +574,290 @@ body {
   display: inline-block;
 }
 /* --- End DecryptText Component Styles --- */
+
+/* Mobile-first responsive design improvements */
+@media (max-width: 768px) {
+  html, body {
+    /* Allow scrolling on mobile devices */
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  
+  .App {
+    height: 100vh;
+    width: 100%;
+    /* Ensure proper mobile viewport handling */
+    min-height: -webkit-fill-available;
+  }
+  
+  .terminal {
+    height: 100vh;
+    min-height: -webkit-fill-available;
+    padding: 15px;
+    font-size: 14px;
+    line-height: 1.4;
+    /* Improve mobile touch interactions */
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+  
+  .terminal-input {
+    font-size: 14px;
+    /* Prevent zoom on input focus for iOS */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+  
+  .terminal-input-line {
+    flex-wrap: wrap;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  .terminal-input-line span {
+    margin-right: 5px;
+    font-size: 14px;
+  }
+  
+  /* Better mobile text rendering */
+  .terminal-output > div,
+  .terminal-output > span,
+  .terminal-output > pre {
+    font-size: 14px;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+  
+  .terminal-output pre.ascii-logo {
+    font-size: 10px;
+    line-height: 1.2;
+    overflow-x: auto;
+    white-space: pre;
+    word-break: normal;
+    overflow-wrap: normal;
+  }
+  
+  /* Mobile-specific styles for easy-mode button */
+  .easy-mode-button {
+    top: 10px;
+    right: 1rem;
+    height: 36px;
+    padding: 6px 12px;
+    font-size: 0.8em;
+    /* Ensure button is touch-friendly */
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  .button-text {
+    font-size: 0.8em;
+    margin-left: 6px;
+  }
+  
+  .easy-mode-button svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .overlay-content {
+    padding: 20px 25px;
+    max-width: 350px;
+    width: 95%;
+    margin: 0 10px;
+  }
+  
+  .overlay-nav-list {
+    gap: 0.8rem;
+  }
+  
+  .overlay-nav-link {
+    padding: 12px 20px;
+    font-size: 0.9rem;
+    /* Make navigation links touch-friendly */
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Mobile-specific boot sequence optimizations */
+  .boot-container {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .boot-button {
+    padding: 16px 32px;
+    font-size: 18px;
+    min-width: 200px;
+    min-height: 60px;
+    background-color: #00ffff;
+    color: #000000;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Fira Code', monospace;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 255, 255, 0.3);
+  }
+  
+  .boot-button:hover {
+    background-color: #00cccc;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 255, 255, 0.4);
+  }
+  
+  .grub-menu {
+    font-size: 8px;
+    line-height: 1.1;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  
+  .boot-line {
+    font-size: 12px;
+    line-height: 1.3;
+    word-break: break-word;
+  }
+  
+  /* Enhanced terminal text wrapping for mobile */
+  .terminal-output {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  /* Ensure command output wraps properly */
+  .terminal-output > div,
+  .terminal-output > span,
+  .terminal-output > pre:not(.ascii-logo) {
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+  
+  /* Long URLs and paths should break */
+  .terminal-output a,
+  .terminal-output code {
+    word-break: break-all;
+    overflow-wrap: break-word;
+  }
+}
+
+/* Mobile-specific hint box improvements */
+@media (max-width: 768px) {
+  .hint-box-overlay {
+    padding: 15px;
+    margin: 10px;
+    max-width: calc(100vw - 40px);
+    font-size: 14px;
+    border-radius: 8px;
+  }
+  
+  .hint-box-title {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  
+  .hint-box-overlay p {
+    line-height: 1.4;
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .hint-box-overlay {
+    padding: 12px;
+    margin: 8px;
+    font-size: 12px;
+  }
+  
+  .hint-box-title {
+    font-size: 14px;
+  }
+}
+
+/* PWA-like mobile app experience */
+@media (display-mode: standalone) {
+  .App {
+    /* Remove any browser UI artifacts in PWA mode */
+    height: 100vh;
+    overflow: hidden;
+  }
+}
+
+/* Safe area adjustments for notched devices */
+@supports (padding: max(0px)) {
+  .terminal {
+    padding-left: max(15px, env(safe-area-inset-left));
+    padding-right: max(15px, env(safe-area-inset-right));
+    padding-top: max(15px, env(safe-area-inset-top));
+    padding-bottom: max(15px, env(safe-area-inset-bottom));
+  }
+  
+  .easy-mode-button {
+    top: max(15px, env(safe-area-inset-top));
+    right: max(2rem, env(safe-area-inset-right));
+  }
+  
+  .mobile-help-button {
+    bottom: max(20px, env(safe-area-inset-bottom));
+    left: max(20px, env(safe-area-inset-left));
+  }
+}
+
+/* Universal text wrapping for all terminal content */
+.terminal,
+.terminal * {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Specific overrides for elements that should maintain structure */
+.terminal-output pre.ascii-logo {
+  white-space: pre;
+  word-break: normal;
+  overflow-wrap: normal;
+  overflow-x: auto;
+}
+
+/* Terminal input line wrapping */
+.terminal-input-line {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+/* Ensure all text content wraps */
+.terminal-output,
+.terminal-output * {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+/* Special handling for code blocks and preformatted text */
+.terminal code,
+.terminal pre:not(.ascii-logo) {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Links and URLs should break appropriately */
+.terminal a {
+  word-break: break-all;
+  overflow-wrap: break-word;
+}

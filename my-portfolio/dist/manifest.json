@@ -1,0 +1,21 @@
+{
+  "name": "Andrei Banu's Portfolio",
+  "short_name": "Portfolio",
+  "description": "Interactive terminal-based portfolio website",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#00ffff",
+  "orientation": "any",
+  "scope": "/",
+  "lang": "en-US",
+  "categories": ["portfolio", "developer", "terminal"],
+  "prefer_related_applications": false
+}

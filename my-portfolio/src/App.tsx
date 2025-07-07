@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BootSequence } from './components';
+import { BootSequence, MobileTerminalEnhancements } from './components';
+import { useDeviceDetection } from './hooks/useDeviceDetection';
 import './styles/App.css';
 import { commands, unknownCommand, CommandOutput } from './utils/commands';
 
@@ -14,6 +15,9 @@ const renderPrompt = () => (
 );
 
 function App() {
+    // Device detection
+    const { isMobile } = useDeviceDetection();
+    
     // Boot sequence state - persisted to skip on refresh
     const [bootCompleted, setBootCompleted] = useState<boolean>(() => {
         return sessionStorage.getItem(BOOT_COMPLETED_KEY) === 'true';
@@ -118,8 +122,8 @@ function App() {
 
         if (command !== '') {
              const commandName = command.split(' ')[0].toLowerCase();
-             // Hide hint box when user successfully runs a command
-             if (commandName in commands && isHintVisible) {
+             // Hide hint box when user successfully runs a command (only on desktop)
+             if (!isMobile && commandName in commands && isHintVisible) {
                  setIsHintVisible(false);
              }
 
@@ -157,8 +161,8 @@ function App() {
             setTimeout(async () => {
                 await processCommand('neofetch');
 
-                // Show hint box for first-time users
-                if (sessionStorage.getItem(HINT_BOX_SHOWN_KEY) === null) {
+                // Show hint box for first-time users (only on desktop)
+                if (!isMobile && sessionStorage.getItem(HINT_BOX_SHOWN_KEY) === null) {
                     setIsHintVisible(true);
                     setIsHintPulsing(true);
                     sessionStorage.setItem(HINT_BOX_SHOWN_KEY, 'true');
@@ -169,7 +173,7 @@ function App() {
                 }
             }, 100);
         }
-    }, [bootCompleted]);
+    }, [bootCompleted, isMobile]);
 
     useEffect(() => {
         endOfOutputRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -217,7 +221,7 @@ function App() {
     return (
         <div className="App">
             {bootCompleted ? (
-                <>
+                <MobileTerminalEnhancements>
                     {/* --- Render Hint Box as an Overlay --- */}
                     {isHintVisible && (
                         <div className={`hint-box-overlay ${isHintPulsing ? 'pulse' : ''}`}>
@@ -249,7 +253,7 @@ function App() {
                         </div>
                         <div ref={endOfOutputRef} />
                     </div>
-                </>
+                </MobileTerminalEnhancements>
             ) : !hasInitiatedBoot ? (
                 <div className="boot-container">
                     <button className="boot-button" onClick={handleBootInitiation}>
