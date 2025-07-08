@@ -137,7 +137,88 @@ body {
 .error-message {
   color: #ff0000; /* Updated error message color */
 }
-/* --- End Command Output Colors --- */
+
+/* ARG (Operation B.A.N.U.) Specific Styles */
+.success-message {
+  color: #00ff00; /* Bright green for success */
+  font-weight: bold;
+}
+
+.warning-message {
+  color: #ffff00; /* Yellow for warnings */
+  font-weight: bold;
+}
+
+.info-message {
+  color: #00bfff; /* Light blue for info */
+}
+
+.arg-activated {
+  color: #ff00ff; /* Magenta for ARG activation */
+  font-weight: bold;
+  text-shadow: 0 0 5px #ff00ff;
+}
+
+.network-status {
+  color: #00ff00; /* Green for network connected */
+}
+
+.clearance-level {
+  color: #ffaa00; /* Orange for clearance levels */
+  font-weight: bold;
+}
+
+.fragment-data {
+  background-color: #001100;
+  color: #00ff00;
+  padding: 5px;
+  border-left: 3px solid #00ff00;
+  margin: 5px 0;
+  font-family: inherit;
+}
+
+.hash-data {
+  font-family: inherit;
+  color: #888888;
+  font-size: 0.9em;
+}
+
+.blockchain-header {
+  color: #00ffff;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.master-completion {
+  background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: bold;
+  font-size: 1.1em;
+  text-align: center;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff;
+  }
+  to {
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff;
+  }
+}
+
+/* ARG Command Prompt Styles */
+.arg-prompt {
+  color: #ff00ff; /* Magenta prompt for ARG mode */
+}
+
+.arg-authenticated {
+  color: #00ff00; /* Green for authenticated state */
+}
+
+/* --- End ARG Styles --- */
 
 /* --- Boot Sequence Styles --- */
 .boot-sequence {
