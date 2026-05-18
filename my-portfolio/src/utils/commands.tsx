@@ -106,7 +106,7 @@ const neofetch: CommandFunction = (_args, _executeCommand, navigate): CommandOut
         '\u00A0',
         '-----------------------',
         <div key="nf-mem"><span className="neofetch-label">Pt Mhyun</span> Told you i'd make it :P</div>,
-        <div key="nf-mem"><span className="neofetch-label">Dedicatie Stefan Conea</span> cnc boy</div>,
+        <div key="nf-mem"><span className="neofetch-label">Dedicatie g233</span> cnc boy</div>,
         '\u00A0',
         <div key="nf-user"><span className="neofetch-label">User:</span> Andrei Banu</div>,
         '\u00A0',
