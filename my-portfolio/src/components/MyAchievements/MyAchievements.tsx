@@ -7,22 +7,34 @@ import './MyAchievements.css';
 const MyAchievements: React.FC = () => {
   // Global mouse event listener for Dither reactivity
   useEffect(() => {
-    const handleGlobalMouseMove = (e: MouseEvent) => {
-      const ditherCanvas = document.querySelector('canvas');
-      if (ditherCanvas) {
-        const mouseEvent = new MouseEvent('pointermove', {
-          clientX: e.clientX,
-          clientY: e.clientY,
-          bubbles: true
-        });
-        ditherCanvas.dispatchEvent(mouseEvent);
+    // Cache the canvas node and coalesce to one synthetic dispatch per frame,
+    // instead of a querySelector + event dispatch on every mousemove.
+    let cachedCanvas: HTMLCanvasElement | null = null;
+    let rafId = 0;
+    let pending: { x: number; y: number } | null = null;
+    const flush = () => {
+      rafId = 0;
+      if (!pending) return;
+      if (!cachedCanvas || !cachedCanvas.isConnected) {
+        cachedCanvas = document.querySelector('canvas');
       }
+      cachedCanvas?.dispatchEvent(new MouseEvent('pointermove', {
+        clientX: pending.x,
+        clientY: pending.y,
+        bubbles: true,
+      }));
+      pending = null;
+    };
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      pending = { x: e.clientX, y: e.clientY };
+      if (!rafId) rafId = requestAnimationFrame(flush);
     };
 
     document.addEventListener('mousemove', handleGlobalMouseMove);
 
     return () => {
       document.removeEventListener('mousemove', handleGlobalMouseMove);
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
   return (
@@ -95,6 +107,12 @@ const MyAchievements: React.FC = () => {
               <li>🥇 <strong>FLL Romania – 1st Place National Award</strong></li>
               <li>🥇 <strong>FLL Romania – 1st Place Regional Award</strong></li>
               <li>🤖 <strong>WRO Romania – National Participant (2022–2023)</strong></li>
+            </ul>
+
+            <h2 className="section-title">🦾 FIRST Tech Challenge (FTC)</h2>
+            <ul className="achievements-list">
+              <li>🥉 <strong>FTC DECODE – Da Vinci Division, 3rd Place</strong></li>
+              <li>🥈 <strong>MTI – 2nd Place (Alliance Partner)</strong></li>
             </ul>
 
             <h2 className="section-title">🧠 Academic & Intellectual Recognition</h2>

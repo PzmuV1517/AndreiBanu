@@ -316,8 +316,12 @@ export default function Dither({
     <Canvas
       className="w-full h-full relative"
       camera={{ position: [0, 0, 6] }}
-      dpr={window.devicePixelRatio}
-      gl={{ antialias: true, preserveDrawingBuffer: true }}
+      // The effect is deliberately posterized/pixelated, so rendering above 2x
+      // DPR is wasted fill-rate; [1, 2] lets R3F adapt and caps cost on 3x displays.
+      dpr={[1, 2]}
+      // Antialiasing is invisible under the RetroEffect posterize/pixelate pass,
+      // and the drawing buffer is never read back (no screenshots), so both off.
+      gl={{ antialias: false, preserveDrawingBuffer: false }}
     >
       <DitheredWaves
         waveSpeed={waveSpeed}

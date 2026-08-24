@@ -14,16 +14,27 @@ const MyProjects: React.FC = () => {
     document.body.style.overflow = 'auto';
     
     // Global mouse move handler to ensure Dither reactivity everywhere
-    const handleGlobalMouseMove = (e: MouseEvent) => {
-      const ditherCanvas = document.querySelector('canvas');
-      if (ditherCanvas) {
-        const mouseEvent = new MouseEvent('pointermove', {
-          clientX: e.clientX,
-          clientY: e.clientY,
-          bubbles: true
-        });
-        ditherCanvas.dispatchEvent(mouseEvent);
+    // Cache the canvas node and coalesce to one synthetic dispatch per frame,
+    // instead of a querySelector + event dispatch on every mousemove.
+    let cachedCanvas: HTMLCanvasElement | null = null;
+    let rafId = 0;
+    let pending: { x: number; y: number } | null = null;
+    const flush = () => {
+      rafId = 0;
+      if (!pending) return;
+      if (!cachedCanvas || !cachedCanvas.isConnected) {
+        cachedCanvas = document.querySelector('canvas');
       }
+      cachedCanvas?.dispatchEvent(new MouseEvent('pointermove', {
+        clientX: pending.x,
+        clientY: pending.y,
+        bubbles: true,
+      }));
+      pending = null;
+    };
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      pending = { x: e.clientX, y: e.clientY };
+      if (!rafId) rafId = requestAnimationFrame(flush);
     };
 
     document.addEventListener('mousemove', handleGlobalMouseMove);
@@ -35,6 +46,7 @@ const MyProjects: React.FC = () => {
       document.body.style.padding = '';
       document.body.style.overflow = '';
       document.removeEventListener('mousemove', handleGlobalMouseMove);
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
 
@@ -108,6 +120,23 @@ const MyProjects: React.FC = () => {
                   <li><em>Goal:</em> Build a viable alternative to manual bug bounty work and traditional pentesting workflows.</li>
                 </ul>
               </li>
+              <li>🛰️ <strong>FerriteWorks – Presence-Fusion Engine</strong>
+                <ul>
+                  <li>A physical-security situational-awareness core that maintains a probabilistic belief over where people are on a floorplan, fused from cameras, PIR, mmWave radar, door contacts, and access-control readers — rendering that belief with its uncertainty.</li>
+                  <li>The same fusion engine runs identically in simulation and real deployment; only the sensor event source changes.</li>
+                </ul>
+              </li>
+              <li>👁️ <strong>Know-It-All – Profiling + Lab Vision System</strong>
+                <ul>
+                  <li>A profiling platform paired with on-site Raspberry Pi cameras that recognise people, log entries/exits, and surface unknown faces for assignment.</li>
+                  <li>FastAPI backend, React/TypeScript frontend, and a Pi agent running YOLOv8 detection, InsightFace face ID, OSNet body Re-ID and SORT tracking.</li>
+                </ul>
+              </li>
+              <li>🧊 <strong>CC-Vibes – Vibe-code ComputerCraft in Minecraft</strong>
+                <ul>
+                  <li>A Fabric mod that runs a live Claude Code session against your Minecraft world, giving it eyes on the world through an MCP server plus an in-game IDE and HUD.</li>
+                </ul>
+              </li>
             </ul>
 
             <h2 className="section-title">🛠️ Practical Tools & Personal Projects</h2>
@@ -125,6 +154,51 @@ const MyProjects: React.FC = () => {
                   <li>- Driver-car assignment tracking</li>
                 </ul>
               </li>
+              <li>🖨️ <strong>Sunmi Print Hub</strong>
+                <ul>
+                  <li>Turns the built-in 58mm thermal printer on a Sunmi V2 Pro into a network print hub reachable four ways: on-device UI, HTTP API, MQTT (with Home Assistant auto-discovery), and an internet WebSocket listener — plus a FastAPI companion server with a pixel-accurate live preview.</li>
+                </ul>
+              </li>
+              <li>🎞️ <strong>StretchDvr – Browser AVI→MP4 Converter</strong>
+                <ul>
+                  <li>A fully client-side AVI to MP4 converter for DVR footage, running FFmpeg via WebAssembly — no uploads, no server processing. Supports 4:3 preserve or 16:9 stretch, batch queues, and advanced encoding controls.</li>
+                </ul>
+              </li>
+              <li>🧩 <strong>QuizMeAnything – AI Quiz Generator</strong>
+                <ul>
+                  <li>An AI-powered quiz generator and classroom tool built with React, Firebase, and Google's Gemini API — instant quizzes on any topic, plus a teacher portal for classes, shareable tests, and results tracking.</li>
+                </ul>
+              </li>
+            </ul>
+
+            <h2 className="section-title">🦾 FIRST Tech Challenge Tooling</h2>
+            <ul className="projects-list">
+              <li>🧭 <strong>Altair – Visual State-Machine Authoring for FTC</strong>
+                <ul>
+                  <li>A Tauri desktop app (Rust + React) where you draw a hierarchical state machine on a canvas and it compiles to plain, native Java 8 that runs on the robot at full speed — no runtime interpreter.</li>
+                  <li>Structure is compiled to native code; tunable values are emitted as live-editable FTC Dashboard <span className="code">@Config</span> fields.</li>
+                </ul>
+              </li>
+              <li>🎯 <strong>Splat – FTC Autonomous Sequence Builder</strong>
+                <ul>
+                  <li>A Python desktop app for designing autonomous paths on a 144×144" field with drag-and-drop waypoints, bezier curves, and robot-orientation previews — generating Java compatible with the Blob state-machine library.</li>
+                </ul>
+              </li>
+              <li>🫧 <strong>blob – Holonomic Path Follower</strong>
+                <ul>
+                  <li>A lightweight field-relative mecanum path follower for FTC, used to build the solo 30-ball close auto in the DECODE season. Point-to-point PID driving on a pluggable goBILDA Pinpoint localizer.</li>
+                </ul>
+              </li>
+              <li>📊 <strong>FTC Insight – EPA Analytics Platform</strong>
+                <ul>
+                  <li>A live-updating analytics platform for FTC using the Expected Points Added (EPA) rating system — team ratings, match predictions, and event analytics. Built with Next.js and FastAPI.</li>
+                </ul>
+              </li>
+              <li>🚀 <strong>Pusher – One-Command FTC Deploy</strong>
+                <ul>
+                  <li>A single command to build an FTC project and deploy it straight to the robot.</li>
+                </ul>
+              </li>
             </ul>
 
             <h2 className="section-title">🚁 Autonomous Systems & Robotics</h2>
@@ -137,6 +211,12 @@ const MyProjects: React.FC = () => {
               <li>📱 <strong>Lifeguard Android App</strong>
                 <ul>
                   <li>A real-time interface for the rescue drone, allowing lifeguards to control and receive telemetry from the drone via a mobile device.</li>
+                </ul>
+              </li>
+              <li>🔥 <strong>FireAware – Crowdsourced Fire-Spotting Platform</strong>
+                <ul>
+                  <li>Mobile users photograph distant fires; the backend triangulates bearings from multiple sightings and renders confirmed fires on a public map.</li>
+                  <li>FastAPI + PostGIS bearing-ray triangulation with a single cross-platform Expo app (web / iOS / Android) using MapLibre GL and device sensors.</li>
                 </ul>
               </li>
             </ul>
@@ -155,6 +235,16 @@ const MyProjects: React.FC = () => {
               <li>📈 <strong>Crypto Trading Bot (Coinbase API)</strong>
                 <ul>
                   <li>A rules-based crypto trading algorithm that interacts with live market data via the Coinbase API. Supports real-time trading decisions, stop-loss handling, and logging.</li>
+                </ul>
+              </li>
+              <li>🧮 <strong>Topological Arbitrage</strong>
+                <ul>
+                  <li>A market-neutral strategy on 1-minute crypto data using Topological Data Analysis — a rolling graph-diffusion residual signal from a correlation Laplacian plus persistent-homology regime features, with a risk-scaled allocator and a FastAPI paper-execution bridge.</li>
+                </ul>
+              </li>
+              <li>🤖 <strong>NoIqTrader – Grid Trading Bot</strong>
+                <ul>
+                  <li>A grid-based trading bot with a backtesting engine, technical indicators, and parameter sweeps for strategy optimization.</li>
                 </ul>
               </li>
             </ul>

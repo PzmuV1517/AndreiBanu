@@ -86,6 +86,7 @@ const neofetch: CommandFunction = (_args, _executeCommand, navigate): CommandOut
     return [
         <pre key="logo" className="ascii-logo">{logoAscii}</pre>,
         <div key="nf-title"><span className="neofetch-label">Title:</span> Cybersecurity Enthusiast</div>,
+        <div key="nf-age"><span className="neofetch-label">Age:</span> 16</div>,
         '\u00A0',
         '\u00A0',
         '-----------------------',

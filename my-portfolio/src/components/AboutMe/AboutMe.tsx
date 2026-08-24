@@ -14,16 +14,27 @@ const AboutMe: React.FC = () => {
     document.body.style.overflow = 'auto';
 
     // Global mouse move handler to ensure Dither reactivity everywhere
-    const handleGlobalMouseMove = (e: MouseEvent) => {
-      const ditherCanvas = document.querySelector('canvas');
-      if (ditherCanvas) {
-        const mouseEvent = new MouseEvent('pointermove', {
-          clientX: e.clientX,
-          clientY: e.clientY,
-          bubbles: true
-        });
-        ditherCanvas.dispatchEvent(mouseEvent);
+    // Cache the canvas node and coalesce to one synthetic dispatch per frame,
+    // instead of a querySelector + event dispatch on every mousemove.
+    let cachedCanvas: HTMLCanvasElement | null = null;
+    let rafId = 0;
+    let pending: { x: number; y: number } | null = null;
+    const flush = () => {
+      rafId = 0;
+      if (!pending) return;
+      if (!cachedCanvas || !cachedCanvas.isConnected) {
+        cachedCanvas = document.querySelector('canvas');
       }
+      cachedCanvas?.dispatchEvent(new MouseEvent('pointermove', {
+        clientX: pending.x,
+        clientY: pending.y,
+        bubbles: true,
+      }));
+      pending = null;
+    };
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      pending = { x: e.clientX, y: e.clientY };
+      if (!rafId) rafId = requestAnimationFrame(flush);
     };
 
     document.addEventListener('mousemove', handleGlobalMouseMove);
@@ -34,6 +45,7 @@ const AboutMe: React.FC = () => {
       document.body.style.padding = '';
       document.body.style.overflow = '';
       document.removeEventListener('mousemove', handleGlobalMouseMove);
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
 
@@ -107,7 +119,7 @@ const AboutMe: React.FC = () => {
 
           <div className="about-me-description">
             <p>
-              A 15-year-old Romanian high school student at the{' '}
+              A 16-year-old Romanian high school student at the{' '}
               <em>International Computer High School of Bucharest</em>, with a
               strong focus on cybersecurity, robotics, and autonomous system
               development.
@@ -164,7 +176,11 @@ const AboutMe: React.FC = () => {
               <span className="highlight"> FLL (FIRST LEGO League)</span> and{' '}
               <span className="highlight"> FTC (FIRST Tech Challenge)</span>,
               where I specialize in hardware design, mechanical prototyping, and
-              the yearly Innovation Project.
+              the yearly Innovation Project. In the{' '}
+              <span className="highlight">FTC DECODE</span> season my team placed{' '}
+              <span className="highlight">3rd in the Da Vinci Division</span> and
+              finished <span className="highlight">2nd as an alliance partner at
+              MTI</span>.
             </p>
 
             <p>
